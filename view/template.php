@@ -9,16 +9,16 @@
 
 <body>
     <nav>
-        <a href="../index.php">Accueil</a>
-        <a href="">Trier film</a>
+        <a href="index.php?action=homePage">Accueil</a>
+        <a href="index.php?action=listFilms">liste film</a>
         <a href="">Gestion</a>
     </nav>
     <div>
         <main>
             <div id="contenue">
                 <h1>PDO cinema</h1>
-                <h2>$titre_secondaire</h2>
-                <?= $contenue ?>
+                <h2><?= $titreSecondaire ?></h2>
+                <?= $contenu  ?>
             </div>
         </main>
     </div>
