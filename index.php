@@ -1,5 +1,4 @@
 <?php 
-
 use Controller\CinemaController;
 
 spl_autoload_register(function ($class_name){
@@ -11,6 +10,7 @@ $ctrlCinema = new CinemaController();
 if(isset($_GET["action"])){
     switch($_GET["action"]) {
         case "listFilms" : $ctrlCinema -> listFilms(); break;
-        case "listActeur" : $ctrlCinema -> listActeur(); break;
+        case "homePage" : $ctrlCinema -> homePage(); break;
+        case "description" : $ctrlCinema -> description($_GET['id']); break;
     }
 }
