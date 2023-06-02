@@ -1,27 +1,19 @@
 <?php ob_start();?>
 
-<p class="uk-label uk-label-warning"> Il y a <?=$requete->rowCount()?>films</p>
+<p> Il y a <?= $requete->rowCount()?> films</p>
 
-<table class="uk-table uk-table-striped">
-    <thead>
-        <tr>
-            <th>TITRE</th>
-            <th>ANNEE SORTIE</th>
-        </tr>
-    </thead>
-    <tbody>
-        <?php
-            foreach($requete->fetchAll() as $film){ ?>
-                <tr>
-                    <td><?= $film["titre"] ?> </td>
-                    <td><?= $film["anneeSortieFrance"] ?> </td>
-                </tr>
-            <?php } ?>
-    </tbody>
-</table>
+
+<div><?php
+    foreach($requete->fetchAll() as $film){ 
+        ?>
+        <div>
+            <p><?= $film["titre"] ?>-<?= $film["anneeSortieFrance"]?> </p>
+            <a href="index.php?action=description&id= ".<?=$film["id_film"]?>.""><img src="public/img/test_img.jpg" width="200"></a>
+        </div>
+<?php } ?></div>
 
 <?php
 $titre = "Liste des films";
 $titreSecondaire = "Liste des films";
 $contenu = ob_get_clean();
-require "View\template.php";
+require "view/template.php";
