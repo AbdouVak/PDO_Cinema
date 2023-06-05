@@ -11,7 +11,7 @@
     <nav>
         <a href="index.php?action=homePage">Accueil</a>
         <a href="index.php?action=listFilms">liste film</a>
-        <a href="">Gestion</a>
+        <a href="index.php?action=ajouterPersonnePage">ajouter personne</a>
     </nav>
     <div>
         <main>
