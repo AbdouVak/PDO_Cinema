@@ -22,13 +22,13 @@ class CinemaController{
     // redirige a la page d'accueille
     public function homePage() {
         // va rediriger vers le homepage (acceuil)
-        require "view/homepage.php";
+        require "view/homePage.php";
     }
 
     public function description($id){
         $pdo = Connect::seConnecter();
-        // requete pour recuupere le titre et nom film
-        $requeteFilm = $pdo->query("
+
+        $sqlFilm = "
         SELECT titre,anneeSortieFrance,affiche,synopsis,genreLibelle,nom,prenom
 
         FROM film ,realisateur,acteur ,personne,genre,genrefilm
@@ -39,13 +39,18 @@ class CinemaController{
         AND genrefilm.id_film = film.id_film
         AND genrefilm.id_genre = genre.id_genre
         
-        AND film.id_film =1
+        AND film.id_film = :id
         
         GROUP BY genre.id_genre
         ORDER BY anneeSortieFrance DESC
 
-        ");
-        $requeteCasting  =  $pdo->query("
+        ";
+
+        $filmsStatement = $pdo->prepare($sqlFilm);
+        $filmsStatement->execute(["id" => $id]);
+        $requeteFilm = $filmsStatement->fetchAll();
+
+        $sqlCasting = "
         SELECT nom,prenom, nomPersonnage
 
         FROM film ,acteur,personne ,jouer, role
@@ -55,10 +60,21 @@ class CinemaController{
         AND role.id_role = jouer.id_role
 
 
-        AND jouer.id_film = 2
+        AND jouer.id_film = :id
         ORDER BY anneeSortieFrance DESC;
-        ");
+        ";
+
+        $castingStatement = $pdo->prepare($sqlCasting);
+        $castingStatement->execute(["id" => $id]);
+        $requeteCasting = $castingStatement->fetchAll();
+
+        
         require "view/description.php";
+    }
+
+    public function ajouterPersonne() {
+        // va rediriger vers le homepage (acceuil)
+        require "view/ajouterPersonne.php";
     }
 }
 
