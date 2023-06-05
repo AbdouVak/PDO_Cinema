@@ -5,7 +5,7 @@
 
 <div>
 <?php 
-foreach($requeteFilm->fetchAll() as $desc){ ?>
+foreach($requeteFilm as $desc){ ?>
     <div>
         <?php // affiche une img si le film n'a pas d'affiche
         if($desc['affiche'] == NULL){
@@ -20,7 +20,7 @@ foreach($requeteFilm->fetchAll() as $desc){ ?>
         acteur : </br>
         
         <?php // affiche les acteur
-            foreach($requeteCasting->fetchAll() as $casting){?>
+            foreach($requeteCasting as $casting){?>
 
                 - <?= $casting['nom'] .' '.$casting['prenom'] .' role :'.$casting['nomPersonnage'] ?><br>
 
@@ -28,7 +28,15 @@ foreach($requeteFilm->fetchAll() as $desc){ ?>
         ?>
 
         Année Sortie France : <?= $desc['anneeSortieFrance'] ?></br>
-        Genre : <?= $desc['genreLibelle'] ?></br>
+
+        Genre :<br>
+        <?php // affiche les acteur
+            foreach($requeteGenre as $genre){?>
+
+                - <?= $genre['genreLibelle']?><br>
+
+            <?php }
+        ?>
 
         <?php // affiche "Pas de synopsis" si il'y a pas de synopsis
         if($desc['synopsis'] == NULL){
