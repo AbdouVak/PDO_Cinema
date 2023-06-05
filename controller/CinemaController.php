@@ -84,12 +84,20 @@ class CinemaController{
     }
 
     public function ajouterPersonnePage() {
-        // va rediriger vers le homepage (acceuil)
-        require "view/ajouterPersonne.php";
+        // va rediriger vers la page ajouterPersonne
+        require "view/ajouterPersonnePage.php";
     }
+
     public function ajouterPersonne() {
-        // va rediriger vers le homepage (acceuil)
-        require "view/ajouterPersonne.php";
+        $pdo = Connect::seConnecter();
+        
+        $sqlPersonne = "
+        INSERT INTO `cinema`.`personne` ( `nom`, `prenom`, `sexe`, `dateNaissance`) 
+        VALUES ('".$_POST["nom"]."', '".$_POST["prenom"]."', '".$_POST["sexe"]."', '".$_POST["dateNaissance"]."');
+        ";
+        
+        $personnesStatement = $pdo->prepare($sqlPersonne);
+        $personnesStatement->execute();
     }
 
 }
