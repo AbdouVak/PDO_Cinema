@@ -29,19 +29,16 @@ class CinemaController{
         $pdo = Connect::seConnecter();
 
         $sqlFilm = "
-        SELECT titre,anneeSortieFrance,affiche,synopsis,genreLibelle,nom,prenom
+        SELECT titre,anneeSortieFrance,affiche,synopsis,nom,prenom
 
-        FROM film ,realisateur,acteur ,personne,genre,genrefilm
+        FROM film ,realisateur,acteur ,personne
         
         WHERE film.id_realisateur = realisateur.id_realisateur
         
         AND realisateur.id_personne = personne.id_personne
-        AND genrefilm.id_film = film.id_film
-        AND genrefilm.id_genre = genre.id_genre
         
         AND film.id_film = :id
-        
-        GROUP BY genre.id_genre
+        GROUP BY film.id_film
         ORDER BY anneeSortieFrance DESC
 
         ";
@@ -49,6 +46,20 @@ class CinemaController{
         $filmsStatement = $pdo->prepare($sqlFilm);
         $filmsStatement->execute(["id" => $id]);
         $requeteFilm = $filmsStatement->fetchAll();
+
+        $sqlGenre = "
+        SELECT genreLibelle
+
+        FROM film ,genre,genrefilm 
+        WHERE film.id_film = genrefilm.id_film
+        AND genrefilm.id_genre = genre.id_genre
+        
+        AND film.id_film = :id
+        ";
+
+        $genreStatement = $pdo->prepare($sqlGenre);
+        $genreStatement->execute(["id" => $id]);
+        $requeteGenre = $genreStatement->fetchAll();
 
         $sqlCasting = "
         SELECT nom,prenom, nomPersonnage
@@ -72,9 +83,14 @@ class CinemaController{
         require "view/description.php";
     }
 
+    public function ajouterPersonnePage() {
+        // va rediriger vers le homepage (acceuil)
+        require "view/ajouterPersonne.php";
+    }
     public function ajouterPersonne() {
         // va rediriger vers le homepage (acceuil)
         require "view/ajouterPersonne.php";
     }
+
 }
 
