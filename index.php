@@ -12,5 +12,6 @@ if(isset($_GET["action"])){
         case "listFilms" : $ctrlCinema -> listFilms(); break;
         case "homePage" : $ctrlCinema -> homePage(); break;
         case "description" : $ctrlCinema -> description($_GET['id']); break;
+        case "ajouterPersonne" : $ctrlCinema -> ajouterPersonne(); break;
     }
 }
