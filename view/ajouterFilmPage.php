@@ -2,40 +2,64 @@
 
 <!-- formulaires -->
 <form action="index.php?action=ajouterFilm" method="POST" enctype="multipart/form-data">
-    <!-- +------------------------------+  -->
-    <!-- |   Titre :  [              ]  |  -->
-    <!-- +------------------------------+  -->
+    <!-- +-------------------------------------+  -->
+    <!-- |   Titre :  [              ]         |  -->
+    <!-- +-------------------------------------+  -->
     <label for="titre">Titre:</label>
     <input type="text" name="titre" required minlength="3" maxlength="20" size="10"><br><br>
 
-    <!-- +------------------------------+  -->
-    <!-- |   Réalisateur :  [  \/ ]     |  -->
-    <!-- +------------------------------+  -->
-    <label for="realisateur">Réalisateur:</label>
-    <select name="realisateur" id="realisateur"><?php 
-        // boucle pour affiche les acteur un par un
+    <!-- +-------------------------------------+  -->
+    <!-- |   Réalisateur nom :  [  \/ ]        |  -->
+    <!-- +-------------------------------------+  -->
+    <label for="realisateurNom">Réalisateur nom:</label>
+    <select name="realisateurNom" ><?php 
+        // boucle pour affiche les realisateur un par un
         foreach($requeteReal as $real){
-            ?><option><?= $real["nom"]?> <?= $real["prenom"]?></option><?php 
+            ?><option><?= $real["nom"]?></option><?php 
+        }?>
+    </select><br><br>
+
+    <!-- +-------------------------------------+  -->
+    <!-- |   Réalisateur prenom :  [  \/ ]     |  -->
+    <!-- +-------------------------------------+  -->
+    <label for="realisateurPrenom">Réalisateur prenom:</label>
+    <select name="realisateurPrenom"><?php 
+        // boucle pour affiche les realisateur un par un
+        foreach($requeteReal as $real){
+            ?><option><?= $real["prenom"]?></option><?php 
         }?>
     </select><br><br>
     
-    <!-- +------------------------------+  -->
-    <!-- |   Année Sorite :  [      ]   |  -->
-    <!-- +------------------------------+  -->
+    <!-- +-------------------------------------+  -->
+    <!-- |   Genre :  [  \/ ] ou [    ]        |  -->
+    <!-- +-------------------------------------+  -->
+    <label for="genre">Genre:</label>
+    <select name="genre"><?php 
+        // boucle pour affiche les genre un par un
+        foreach($requeteGenre as $genre){?>
+            <option><?= $genre["genreLibelle"]?></option>
+    	    <?php 
+        }?>
+        <input type="text" name="genre" required minlength="4" maxlength="20" size="10">
+    </select><br><br>
+
+    <!-- +-------------------------------------+  -->
+    <!-- |   Année Sortie :  [      ]          |  -->
+    <!-- +-------------------------------------+  -->
     <label for="anneeSortie">Année Sortie:</label>
     <input type="text" name="anneeSortie" required minlength="4" maxlength="4" size="4">
     <br><br>
 
-    <!-- +------------------------------+  -->
-    <!-- |   Durée :  [      ]          |  -->
-    <!-- +------------------------------+  -->
+    <!-- +-------------------------------------+  -->
+    <!-- |   Durée :  [      ]                 |  -->
+    <!-- +-------------------------------------+  -->
     <label for="duree">Durée:</label>
     <input type="text" name="duree" required minlength="3" maxlength="4" size="4">
     <br><br>
 
-    <!-- +------------------------------+  -->
-    <!-- |  [ ajouter personne ]        |  -->
-    <!-- +------------------------------+  -->
+    <!-- +-------------------------------------+  -->
+    <!-- |  [ ajouter personne ]               |  -->
+    <!-- +-------------------------------------+  -->
     <input type="submit" value="ajouter personne" >
 
 </form>
