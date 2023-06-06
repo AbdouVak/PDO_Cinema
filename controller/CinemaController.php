@@ -120,7 +120,32 @@ class CinemaController{
         $requeteActeur = $castingStatement->fetchAll();
 
         require "view/ajouterCastingPage.php"; // redirige vers la page ajouterCastingPage
-    } 
+    }
+
+    // redirige a la page d'ajout d'un film
+    public function ajouterFilmPage() {
+        $pdo = Connect::seConnecter();
+        // requête pour recupere tous les titre de film
+        $sqlReal = "
+        SELECT nom,prenom 
+        FROM personne,realisateur
+        WHERE personne.id_personne = realisateur.id_personne";
+        
+        $realStatement = $pdo->prepare($sqlReal);
+        $realStatement->execute();
+        $requeteReal = $realStatement->fetchAll();
+
+        $pdo = Connect::seConnecter();
+        // requête pour recupere tous les titre de film
+        $sqlGenre = "
+        SELECT genreLibelle
+        FROM genre";
+        
+        $genreStatement = $pdo->prepare($sqlGenre);
+        $genreStatement->execute();
+        $requeteGenre = $genreStatement->fetchAll();
+        require "view/ajouterFilmPage.php";
+    }
 
     // ------------------------------------------------------  case avec des methode qui envoie des information vers la bdd ------------------------------------------------------
     // ajoue a la bdd une personne
@@ -171,8 +196,8 @@ class CinemaController{
         // requête pour ajouter a la table jouer l'acteur avec son role dans un film
         $sqlCasting = "
         INSERT INTO `cinema`.`jouer` (`id_film`, `id_acteur`, `id_role`)
-        SELECT id_film AS idFilm,id_acteur AS idActeur, id_role AS idRole
 
+        SELECT id_film AS idFilm,id_acteur AS idActeur, id_role AS idRole
         FROM film,acteur,role
 
         HAVING idFilm IN (
@@ -213,16 +238,55 @@ class CinemaController{
         require "view/ajouterCastingPage.php";// redirige vers la page ajouterCastingPage
     }
 
-    // redirige a la page d'ajout d'un film
-    public function ajouterFilmPage() {
+    // ajoute ajoute un acteur avec son role d'un dans la bdd
+    public function ajouterGenre() {
         $pdo = Connect::seConnecter();
-        $sqlReal = "
+        // requete pour ajouter un role
+        $sqlGenre= "
+        INSERT INTO `cinema`.`genre` (`genreLibelle`) 
+        VALUES ('".htmlspecialchars($_POST['genre'], ENT_QUOTES)."');
         ";
-        
-        $realStatement = $pdo->prepare($sqlReal);
-        $realStatement->execute();
-        $requeteReal = $realStatement->fetchAll();
-        require "view/ajouterFilmPage.php";
+        $genreStatement = $pdo->prepare($sqlGenre);
+        $genreStatement->execute();
+        require "view/ajouterCastingPage.php";// redirige vers la page ajouterCastingPage
+    }
+
+    // ajoute ajoute un acteur avec son role d'un dans la bdd
+    public function ajouterFilm() {
+        $pdo = Connect::seConnecter();
+        // requete pour ajouter un role
+        $sqlGenre= "
+        INSERT INTO `cinema`.`film` (`titre`, `anneeSortieFrance`, `duree`, `id_realisateur`) 
+        SELECT '".htmlspecialchars($_POST['titre'], ENT_QUOTES)."', '".htmlspecialchars($_POST['anneeSortie'], ENT_QUOTES)."', '".htmlspecialchars($_POST['duree'], ENT_QUOTES)."',id_realisateur
+        FROM realisateur,personne
+        WHERE realisateur.id_personne = personne.id_personne 
+        AND nom = '".htmlspecialchars($_POST['realisateurNom'], ENT_QUOTES)."'
+        AND prenom = '".htmlspecialchars($_POST['realisateurPrenom'], ENT_QUOTES)."'
+        ";
+
+        $genreStatement = $pdo->prepare($sqlGenre);
+        $genreStatement->execute();
+
+        $sqlGenre= "
+        INSERT INTO `cinema`.`genre` (`genreLibelle`) 
+        VALUES ('".htmlspecialchars($_POST['genre'], ENT_QUOTES)."');
+        ";
+        $genreStatement = $pdo->prepare($sqlGenre);
+        $genreStatement->execute();
+
+        // requete pour ajouter un genre au film
+        $sqlGenreFilm= "
+        INSERT INTO `cinema`.`genrefilm` (`id_film`, `id_genre`)
+        SELECT film.id_film,genre.id_genre
+        FROM film,genre
+        WHERE film.titre = '".htmlspecialchars($_POST['titre'], ENT_QUOTES)."'
+        AND genre.genreLibelle ='".htmlspecialchars($_POST['genre'], ENT_QUOTES)."'
+        ";
+
+        $genreFilmStatement = $pdo->prepare($sqlGenreFilm);
+        $genreFilmStatement->execute();
+
+        require "view/ajouterFilmPage.php";// redirige vers la page ajouterCastingPage
     }
 
 }
