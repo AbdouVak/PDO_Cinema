@@ -2,12 +2,15 @@
 
 <!-- formulaires -->
 <form action="index.php?action=ajouterFilm" method="POST" enctype="multipart/form-data">
-
-    <!-- Titre :  [              ]  -->
+    <!-- +------------------------------+  -->
+    <!-- |   Titre :  [              ]  |  -->
+    <!-- +------------------------------+  -->
     <label for="titre">Titre:</label>
     <input type="text" name="titre" required minlength="3" maxlength="20" size="10"><br><br>
 
-    <!-- Réalisateur :  [  \/ ]  -->
+    <!-- +------------------------------+  -->
+    <!-- |   Réalisateur :  [  \/ ]     |  -->
+    <!-- +------------------------------+  -->
     <label for="realisateur">Réalisateur:</label>
     <select name="realisateur" id="realisateur"><?php 
         // boucle pour affiche les acteur un par un
@@ -15,18 +18,24 @@
             ?><option><?= $real["nom"]?> <?= $real["prenom"]?></option><?php 
         }?>
     </select><br><br>
-
-    <!-- Année Sorite :  [      ]  -->
+    
+    <!-- +------------------------------+  -->
+    <!-- |   Année Sorite :  [      ]   |  -->
+    <!-- +------------------------------+  -->
     <label for="anneeSortie">Année Sortie:</label>
     <input type="text" name="anneeSortie" required minlength="4" maxlength="4" size="4">
     <br><br>
 
-    <!-- Durée :  [      ]  -->
+    <!-- +------------------------------+  -->
+    <!-- |   Durée :  [      ]          |  -->
+    <!-- +------------------------------+  -->
     <label for="duree">Durée:</label>
     <input type="text" name="duree" required minlength="3" maxlength="4" size="4">
     <br><br>
 
-    <!-- [ ajouter personne ]  -->
+    <!-- +------------------------------+  -->
+    <!-- |  [ ajouter personne ]        |  -->
+    <!-- +------------------------------+  -->
     <input type="submit" value="ajouter personne" >
 
 </form>
