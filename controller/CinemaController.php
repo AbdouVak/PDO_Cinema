@@ -4,31 +4,33 @@ namespace Controller;
 use Model\Connect;
 
 class CinemaController{
-
+    // ------------------------------------------------------  case avec des methode qui redirige juste vers de page ------------------------------------------------------
     // obtien les affiche, titre et année de sortie films
     public function listFilms() {
-        // se connect a la base de données
-        $pdo = Connect::seConnecter();
-        // requete pour recuupere le titre et nom film
+        $pdo = Connect::seConnecter();// se connect a la base de données
+
+        // requete pour recupere le titre et nom film
         $requete = $pdo->query("
             SELECT titre,anneeSortieFrance,affiche,id_film
             FROM film
             ORDER BY anneeSortieFrance DESC;
         ");
-        // va rediriger vers le listFilm
-        require "view/listFilms.php";
+        
+        require "view/homePage.php"; // va rediriger vers le homePage
     }
 
-    // redirige a la page d'accueille
-    public function homePage() {
-        // va rediriger vers le homepage (acceuil)
-        require "view/homePage.php";
+    // ------------------------------------------------------ case avec des methode qui envoie des information vers la page ------------------------------------------------------
+    // redirige a la page d'ajout d'un personnage
+    public function ajouterPersonnePage() {   
+        require "view/ajouterPersonnePage.php"; // va rediriger vers la page ajouterPersonne
     }
 
     // obtien les info d'un film
     public function description($id){
+        // se connect a la base de données
         $pdo = Connect::seConnecter();
 
+        // requete pour recupere le titre année de sortie, l'affiche, le synopsis,nom et prenom du realisateur
         $sqlFilm = "
         SELECT titre,anneeSortieFrance,affiche,synopsis,nom,prenom
 
@@ -45,9 +47,10 @@ class CinemaController{
         ";
 
         $filmsStatement = $pdo->prepare($sqlFilm);
-        $filmsStatement->execute(["id" => $id]);
+        $filmsStatement->execute(["id" => $id]); // permet de recupere les enregistrement du film grace au id en parametre de la fonction
         $requeteFilm = $filmsStatement->fetchAll();
 
+        // requete pour recupere le genre
         $sqlGenre = "
         SELECT genreLibelle
 
@@ -62,6 +65,7 @@ class CinemaController{
         $genreStatement->execute(["id" => $id]);
         $requeteGenre = $genreStatement->fetchAll();
 
+        // requete pour recupere les nom et prenom de tous les acteurs
         $sqlCasting = "
         SELECT nom,prenom, nomPersonnage
 
@@ -80,57 +84,15 @@ class CinemaController{
         $castingStatement->execute(["id" => $id]);
         $requeteCasting = $castingStatement->fetchAll();
 
-        
+        // va rediriger vers la page description
         require "view/description.php";
-    }
-
-    // redirige a la page d'ajout d'un personnage
-    public function ajouterPersonnePage() {
-        // va rediriger vers la page ajouterPersonne
-        require "view/ajouterPersonnePage.php";
-    }
-
-    // ajoue a la bdd une personne
-    public function ajouterPersonne() {
-        $pdo = Connect::seConnecter();
-        
-        $sqlPersonne = "
-        INSERT INTO `cinema`.`personne` ( `nom`, `prenom`, `sexe`, `dateNaissance`) 
-        VALUES ('".htmlspecialchars($_POST['nom'], ENT_QUOTES)."', '".htmlspecialchars($_POST['prenom'], ENT_QUOTES)."', '".htmlspecialchars($_POST['sexe'], ENT_QUOTES)."', '".htmlspecialchars($_POST['dateNaissance'], ENT_QUOTES)."');
-        ";
-        $personnesStatement = $pdo->prepare($sqlPersonne);
-        $personnesStatement->execute();
-
-        if($_POST['metier']== 'acteur'){
-            $sqlActeur = "
-            INSERT INTO `cinema`.`acteur`(`id_personne`)
-            SELECT id_personne 
-            FROM personne
-            WHERE nom = '".htmlspecialchars($_POST['nom'], ENT_QUOTES)."';
-            AND prenom = '".htmlspecialchars($_POST['prenom'], ENT_QUOTES)."';
-            ";
-            $acteurStatement = $pdo->prepare($sqlActeur);
-            $acteurStatement->execute();
-        }elseif($_POST['metier']== 'realisateur'){
-            $sqlReal = "
-            INSERT INTO `cinema`.`realisateur`(`id_personne`)
-            SELECT id_personne 
-            FROM personne
-            WHERE nom = '".htmlspecialchars($_POST['nom'], ENT_QUOTES)."';
-            AND prenom = '".htmlspecialchars($_POST['prenom'], ENT_QUOTES)."';
-            ";
-            $realStatement = $pdo->prepare($sqlReal);
-            $realStatement->execute();
-        }
-        
-
-        require "view/ajouterPersonnePage.php";
     }
 
     // redirige a la page d'ajout de personnage
     public function ajouterCastingPage() {
         $pdo = Connect::seConnecter();
-        
+
+        // requête pour recupere tous les titre de film
         $sqlCasting = "
         SELECT titre 
         FROM film";
@@ -139,6 +101,7 @@ class CinemaController{
         $castingStatement->execute();
         $requeteFilm = $castingStatement->fetchAll();
 
+        // requête pour recupere tous les nom de personnage des role
         $sqlRole = "
         SELECT nomPersonnage 
         FROM role";
@@ -146,7 +109,8 @@ class CinemaController{
         $roleStatement = $pdo->prepare($sqlRole);
         $roleStatement->execute();
         $requeteRole = $roleStatement->fetchAll();
-        
+
+        // requête pour recupere tous les nom et prenom de toute les personne
         $sqlCasting = "
         SELECT nom,prenom 
         FROM personne";
@@ -155,13 +119,56 @@ class CinemaController{
         $castingStatement->execute();
         $requeteActeur = $castingStatement->fetchAll();
 
-        require "view/ajouterCastingPage.php";
-    }
+        require "view/ajouterCastingPage.php"; // redirige vers la page ajouterCastingPage
+    } 
 
+    // ------------------------------------------------------  case avec des methode qui envoie des information vers la bdd ------------------------------------------------------
+    // ajoue a la bdd une personne
+    public function ajouterPersonne() {
+        $pdo = Connect::seConnecter();
+        // requête pour ajouter une personne à la bdd 
+        $sqlPersonne = "
+        INSERT INTO `cinema`.`personne` ( `nom`, `prenom`, `sexe`, `dateNaissance`) 
+        VALUES ('".htmlspecialchars($_POST['nom'], ENT_QUOTES)."', '".htmlspecialchars($_POST['prenom'], ENT_QUOTES)."', '".htmlspecialchars($_POST['sexe'], ENT_QUOTES)."', '".htmlspecialchars($_POST['dateNaissance'], ENT_QUOTES)."');
+        ";
+
+        $personnesStatement = $pdo->prepare($sqlPersonne);
+        $personnesStatement->execute();
+
+        // en fonction de si on a choisie acteur ou realisateur ajoutere la personne en tant que telle
+        if($_POST['metier']== 'acteur'){
+            // requête pour ajouter la personne dans la table acteur
+            $sqlActeur = "
+            INSERT INTO `cinema`.`acteur`(`id_personne`)
+            SELECT id_personne 
+            FROM personne
+            WHERE nom = '".htmlspecialchars($_POST['nom'], ENT_QUOTES)."';
+            AND prenom = '".htmlspecialchars($_POST['prenom'], ENT_QUOTES)."';
+            ";
+
+            $acteurStatement = $pdo->prepare($sqlActeur);
+            $acteurStatement->execute();
+        }elseif($_POST['metier']== 'realisateur'){
+            // requête pour ajouter la personne dans la table realisasateur
+            $sqlReal = "
+            INSERT INTO `cinema`.`realisateur`(`id_personne`)
+            SELECT id_personne 
+            FROM personne
+            WHERE nom = '".htmlspecialchars($_POST['nom'], ENT_QUOTES)."';
+            AND prenom = '".htmlspecialchars($_POST['prenom'], ENT_QUOTES)."';
+            ";
+
+            $realStatement = $pdo->prepare($sqlReal);
+            $realStatement->execute();
+        }
+        
+        require "view/ajouterPersonnePage.php"; // redirige vers la page ajouterPersonnePage
+    }
+    
     // ajoute ajoute un acteur avec son role d'un dans la bdd
     public function ajouterCasting() {
         $pdo = Connect::seConnecter();
-        
+        // requête pour ajouter a la table jouer l'acteur avec son role dans un film
         $sqlCasting = "
         INSERT INTO `cinema`.`jouer` (`id_film`, `id_acteur`, `id_role`)
         SELECT id_film AS idFilm,id_acteur AS idActeur, id_role AS idRole
@@ -186,11 +193,37 @@ class CinemaController{
             AND personne.prenom = '".htmlspecialchars($_POST['acteurPrenom'], ENT_QUOTES)."'
             AND personne.nom = '".htmlspecialchars($_POST['acteurNom'], ENT_QUOTES)."')
         ";
+
         $castingStatement = $pdo->prepare($sqlCasting);
         $castingStatement->execute();
-        require "view/ajouterCastingPage.php";
+
+        require "view/ajouterCastingPage.php"; // redirige vers la page ajouterCastingPage
     }
 
+    // ajoute ajoute un acteur avec son role d'un dans la bdd
+    public function ajouterRole() {
+        $pdo = Connect::seConnecter();
+        // requete pour ajouter un role
+        $sqlRole= "
+        INSERT INTO `cinema`.`role` (`nomPersonnage`) 
+        VALUES ('".htmlspecialchars($_POST['role'], ENT_QUOTES)."');
+        ";
+        $roleStatement = $pdo->prepare($sqlRole);
+        $roleStatement->execute();
+        require "view/ajouterCastingPage.php";// redirige vers la page ajouterCastingPage
+    }
+
+    // redirige a la page d'ajout d'un film
+    public function ajouterFilmPage() {
+        $pdo = Connect::seConnecter();
+        $sqlReal = "
+        ";
+        
+        $realStatement = $pdo->prepare($sqlReal);
+        $realStatement->execute();
+        $requeteReal = $realStatement->fetchAll();
+        require "view/ajouterFilmPage.php";
+    }
 
 }
 
