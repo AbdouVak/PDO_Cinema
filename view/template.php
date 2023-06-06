@@ -12,6 +12,7 @@
         <a href="index.php?action=homePage">Accueil</a>
         <a href="index.php?action=listFilms">liste film</a>
         <a href="index.php?action=ajouterPersonnePage">ajouter personne</a>
+        <a href="index.php?action=ajouterCastingPage">ajouter casting</a>
     </nav>
     <div>
         <main>
