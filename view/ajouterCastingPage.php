@@ -3,6 +3,7 @@
 
 <!-- formulaires -->
 <form action="index.php?action=ajouterCasting" method="POST" enctype="multipart/form-data">
+    
     <!-- +-------------------------------+ -->
     <!-- |    Film :  [   \/]            | -->
     <!-- +-------------------------------+ -->
