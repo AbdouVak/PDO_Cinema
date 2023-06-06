@@ -10,9 +10,9 @@
 <body>
     <nav>
         <a href="index.php?action=homePage">Accueil</a>
-        <a href="index.php?action=listFilms">liste film</a>
         <a href="index.php?action=ajouterPersonnePage">ajouter personne</a>
         <a href="index.php?action=ajouterCastingPage">ajouter casting</a>
+        <a href="index.php?action=ajouterFilmPage">ajouter film</a>
     </nav>
     <div>
         <main>
