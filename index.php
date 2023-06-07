@@ -21,8 +21,7 @@ if(isset($_GET["action"])){
         // case avec des methode qui envoie des information vers la bdd
         case "ajouterPersonne" : $ctrlCinema -> ajouterPersonne();  break;
         case "ajouterCasting" : $ctrlCinema -> ajouterCasting();  break;
-        case "ajouterFilm" : 
-            $ctrlCinema -> ajouterFilm(); break;
+        case "ajouterFilm" : $ctrlCinema -> ajouterFilm(); break;
 
     }
 }
