@@ -9,14 +9,14 @@ foreach($requeteFilm as $desc){ ?>
     <div>
         <?php // affiche une img si le film n'a pas d'affiche
         if($desc['affiche'] == NULL){
-            ?><img src="public/img/test_img.jpg"><br><?php 
+            ?><img src="public/img/no-cover.png"><br><?php 
         }else{// sinon on met l'affiche
-            ?><img src=""$desc['affiche']""><br><?php 
+            ?><img src="public/img/<?= $desc['affiche']?>"><br><?php 
         } ?>
 
         titre : <?= $desc['titre'] ?></br>
         Réalisateur : <br> -<?= $desc['nom'] .' '.$desc['prenom'] ?></br>
-
+        
         acteur : </br>
         
         <?php // affiche les acteur
@@ -40,9 +40,9 @@ foreach($requeteFilm as $desc){ ?>
 
         <?php // affiche "Pas de synopsis" si il'y a pas de synopsis
         if($desc['synopsis'] == NULL){
-            ?>Synopsis :<p>Pas de synopsis</p><br><?php 
+            ?>Synopsis :<br><p>Pas de synopsis</p><?php 
         }else{// sinon affiche le sinopsis
-            ?>Synopsis : <?php $desc['synopsis']?><br><?php 
+            ?>Synopsis : <br><?= $desc['synopsis']?><?php 
         } ?>
     </div>
 <?php }
