@@ -63,6 +63,24 @@
     <br><br>
 
     <!-- +----------------------------------------+  -->
+    <!-- |   Etoile :  [      ]                   |  -->
+    <!-- +----------------------------------------+  -->
+    <label for="etoile">étoile (optionnel) :</label>
+    <input type="etoile" name="etoile" required minlength="1" maxlength="1" size="1">
+    <br><br>
+
+    <!-- +----------------------------------------+  -->
+    <!-- |   Synopsis :  [      ]                 |  -->
+    <!-- +----------------------------------------+  -->
+    <label for="synopsis">Synopsis (optionnel) :</label><br>
+    <textarea name="synopsis" cols="40" rows="5"></textarea>
+    <br><br>
+
+    <label for="file"> Affiche film :</label> 
+    <input type="file" name="file" >
+    <br><br>
+    
+    <!-- +----------------------------------------+  -->
     <!-- |  [ ajouter film ]                      |  -->
     <!-- +----------------------------------------+  -->
     <input type="submit" value="ajouter film" >
