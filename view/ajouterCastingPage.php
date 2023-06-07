@@ -36,8 +36,8 @@
     <datalist id="acteurNomList"><?php 
         // boucle pour affiche les acteur un par un
         foreach($requeteActeur as $acteur){?>
-            <option><?= $acteur["nom"]?></option><?php 
-        }?>
+            <option><?= $acteur["nom"]?></option>
+        <?php }?>
     </datalist><br><br>
 
     <!-- +-----------------------------------+  -->
@@ -48,9 +48,10 @@
     <datalist id="acteurPrenomList"><?php 
         // boucle pour affiche les acteur un par un
         foreach($requeteActeur as $acteur){?>
-            <option><?= $acteur["prenom"]?></option><?php 
-        }?>
+            <option> <?= $acteur["prenom"]?> </option>
+        <?php }?>
     </datalist><br><br>
+
     
     <!-- +-----------------------------------+  -->
     <!-- |    [ ajouter personne ]           |  -->
