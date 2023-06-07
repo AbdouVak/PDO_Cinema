@@ -4,48 +4,57 @@
 <!-- formulaires -->
 <form action="index.php?action=ajouterCasting" method="POST" enctype="multipart/form-data">
     
-    <!-- +-------------------------------+ -->
-    <!-- |    Film :  [   \/]            | -->
-    <!-- +-------------------------------+ -->
+    <!-- +-----------------------------------+ -->
+    <!-- |    Film :  [   \/]                | -->
+    <!-- +-----------------------------------+ -->
     <label for="film">Film:</label>
-    <select name="film"><?php 
+    <input type="text" name="film" list="filmList" required minlength="3" maxlength="20" size="10">
+    <datalist id="filmList"><?php 
         // boucle pour affiche les acteur un par un
         foreach($requeteFilm as $film){?>
             <option><?= $film["titre"]?></option><?php 
         }?>
-    </select><br><br>
+    </datalist><br><br>
 
-    <!-- +-------------------------------+  -->
-    <!-- |    Role :  [              ]   | -->
-    <!-- +-------------------------------+  -->
+    <!-- +-----------------------------------+  -->
+    <!-- |    Role : [   \/ ] [          ]   | -->
+    <!-- +-----------------------------------+  -->
     <label for="role">Role:</label>
-    <input type="text" name="role" required minlength="3" maxlength="20" size="10">
-    <br><br>
+    <input type="text" name="role" list="roleList" required minlength="3" maxlength="20" size="10">
+    <datalist id="roleList"><?php 
+        // boucle pour affiche les acteur un par un
+        foreach($requeteRole as $role){?>
+            <option><?= $role["nomPersonnage"]?></option><?php 
+        }?>
+    </datalist><br><br>
 
-    <!-- +-------------------------------+  -->
-    <!-- |    Acteur nom :  [   \/]      |  -->
-    <!-- +-------------------------------+  -->
+    <!-- +-----------------------------------+  -->
+    <!-- |    Acteur nom :  [   \/]          |  -->
+    <!-- +-----------------------------------+  -->
     <label for="acteurNom">Acteur nom:</label>
-    <select name="acteurNom" id="acteurNom"><?php 
+    <input type="text" name="acteurNom" list="acteurNomList" required minlength="3" maxlength="20" size="10">
+    <datalist id="acteurNomList"><?php 
         // boucle pour affiche les acteur un par un
         foreach($requeteActeur as $acteur){?>
             <option><?= $acteur["nom"]?></option><?php 
         }?>
-    </select><br><br>
+    </datalist><br><br>
 
-    <!-- +-------------------------------+  -->
-    <!-- |    Acteur prenom :  [   \/]   |  -->
-    <!-- +-------------------------------+  -->
+    <!-- +-----------------------------------+  -->
+    <!-- |    Acteur prenom :  [   \/]       |  -->
+    <!-- +-----------------------------------+  -->
     <label for="acteurPrenom">Acteur prenom:</label>
-    <select name="acteurPrenom" id="acteurPrenom"><?php 
+    <input type="text" name="acteurPrenom" list="acteurPrenomList" required minlength="3" maxlength="20" size="10">
+    <datalist id="acteurPrenomList"><?php 
         // boucle pour affiche les acteur un par un
         foreach($requeteActeur as $acteur){?>
             <option><?= $acteur["prenom"]?></option><?php 
         }?>
-    </select><br><br>
-    <!-- +-------------------------------+  -->
-    <!-- |    [ ajouter personne ]       |  -->
-    <!-- +-------------------------------+  -->
+    </datalist><br><br>
+    
+    <!-- +-----------------------------------+  -->
+    <!-- |    [ ajouter personne ]           |  -->
+    <!-- +-----------------------------------+  -->
     <input type="submit" value="ajouter personne" >
 
 </form>
