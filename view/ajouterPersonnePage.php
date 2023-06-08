@@ -43,6 +43,6 @@
 $titre = "Ajouter personne";
 $titreSecondaire = "Ajouter personne";
 $contenu = ob_get_clean();
-require "view/template.php";
+require "template.php";
 
 

@@ -23,4 +23,4 @@
 $titre = "Acceuil";
 $titreSecondaire = "Acceuil";
 $contenu = ob_get_clean();
-require "view/template.php";
+require "template.php";
