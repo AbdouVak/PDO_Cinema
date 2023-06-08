@@ -91,20 +91,4 @@
 $titre = "Ajouter film";
 $titreSecondaire = "Ajouter film";
 $contenu = ob_get_clean();
-require "view/template.php";
-
-/*
-    <label for="etoile">étoile (optionnel) :</label>
-    <input type="text" name="etoile" required minlength="1" maxlength="1" size="1">
-    <br><br>
-
-    <!-- laffiche -->
-    <label for="affiche">Affiche (optionnel) :</label>
-    <input type="text" name="affiche" required minlength="3" maxlength="20" size="10">
-    <br><br>
-
-    <!-- synopsis -->
-    <label for="synopsis">Synopsis (optionnel) :</label><br>
-    <textarea name="Text1" cols="40" rows="5"></textarea>
-    <br><br>
-*/
+require "template.php";
