@@ -4,168 +4,205 @@ namespace Controller;
 use Model\Connect;
 
 class CinemaController{
-    // ------------------------------------------------------ des methode qui redirige juste vers de page ------------------------------------------------------
-    // obtien les affiche, titre et année de sortie films
-    public function listFilms() {
-        $pdo = Connect::seConnecter();// se connect a la base de données
 
-        // requete pour recupere le titre et nom film
+    // FONCTION QUI RECUPERE DES ELEMENT A LA BDD POUR ENVOIER AU VUE [!]
+    /* Methode listFilms()
+        1. Cet methode possede une requête SQl qui va chercher tout les titre 
+        dans la base de données. 
+
+        2. Puis les données seront stocke dans la variable $requete 
+
+        3. Finalement il va rediriger vers le homePage.php
+    */
+    public function listFilms() {
+        $pdo = Connect::seConnecter(); // Permet de se connecter a la base de données
+        
+        // \/ Etape 2     \/ Etape 1
         $requete = $pdo->query("
             SELECT titre,anneeSortieFrance,affiche,id_film
             FROM film
             ORDER BY anneeSortieFrance DESC;
         ");
-        
-        require "view/homePage.php"; // va rediriger vers le homePage
+
+        // Etape 3.
+        require "view/homePage.php"; 
     }
 
-    // ------------------------------------------------------ methode qui envoie des information vers la page ------------------------------------------------------
-    // redirige a la page d'ajout d'un personnage
+ 
+    /* Methode description($id)
+        1. On stocke $id dans $idFilm pour permettre dans la page description de 
+        faire un bouton modifier qui va servir a la page descModification 
+        De savoir qu'elle film doit être modifier
+
+        2. On crée $ctrlCinema qui une instance de la classe CinemaController()
+
+        3. Nous appelons la methodes recuperDescFilm($id) d'instance $ctrlCinema
+        qui a pour argument $id. Cet methode envoie une requête SQL a la bdd.
+        Elle va récupérer tout les info sur le film précis graçe à l'$id
+
+        4. Stocke tout dans $requeteFilm
+    */
+    public function description($id){
+        
+        $idFilm = $id;// Etape 1.
+        $ctrlCinema = new CinemaController();// Etape 2.
+        $pdo = Connect::seConnecter();// Permet de se connecter a la base de données
+
+        // \/ Etape 4       \/ Etape 3  
+        $requeteFilm = $ctrlCinema ->  recuperDescFilm($id);
+
+        // \/ Etape 4       \/ Etape 3         \/ avec meth recuperGenreFilm() 
+        $requeteGenre = $ctrlCinema -> recuperGenreFilm($id);
+        
+        // \/ Etape 4        \/ Etape 3        \/  avec meth recuperCastingFilm()
+        $requeteCasting = $ctrlCinema -> recuperCastingFilm($id);
+
+        
+        require "view/descriptionPage.php"; // va rediriger vers la page description
+    }
+    
+
+    /* Methode descModificationPage($id)
+        1. On stocke $id dans $idFilm pour permettre dans la page description de 
+        faire un bouton modifier qui va servir a la page descModification 
+        De savoir qu'elle film doit être modifier
+
+        2. On crée $ctrlCinema qui une instance de la classe CinemaController()
+
+        3. Nous appelons la methodes recuperDescFilm($id) d'instance $ctrlCinema
+        qui a pour argument $id. Cet methode envoie une requête SQL a la bdd.
+        Elle va récupérer tout les info sur le film précis graçe à l'$id
+
+        4. Stocke tout dans $requeteFilm
+
+        5.On crée une variable $requeteReal, elle contiendra une requete SQL qui a pour 
+        but de recupérer tout les nom et prenom des réalisateur
+    */
+    public function descModificationPage($id){
+        $idFilm = $id;// Etape 1.
+        $ctrlCinema = new CinemaController();// Etape 2.
+        $pdo = Connect::seConnecter(); // se connect a la base de données
+        
+        // \/ Etape 4       \/ Etape 3  
+        $requeteFilm = $ctrlCinema ->  recuperDescFilm($id);
+
+        // \/ Etape 4       \/ Etape 3         \/ avec meth recuperGenreFilm() 
+        $requeteGenre = $ctrlCinema -> recuperGenreFilm($id);
+        
+        // \/ Etape 4        \/ Etape 3        \/  avec meth recuperCastingFilm()
+        $requeteCasting = $ctrlCinema -> recuperCastingFilm($id);
+        
+        // \/ Etape 5
+        $requeteReal = $pdo->query("
+            SELECT nom,prenom 
+            FROM personne,realisateur
+            WHERE personne.id_personne = realisateur.id_personne
+        ");
+
+        require "view/descModificationPage.php"; // va rediriger vers la page description
+    }
+
+
+    /* Methode ajouterPersonnePage() 
+        redirige a la page d'ajout d'un personnage 
+    */
     public function ajouterPersonnePage() {   
         require "view/ajouterPersonnePage.php"; // va rediriger vers la page ajouterPersonne
     }
 
-    // obtien les info d'un film
-    public function description($id){
 
-        // se connect a la base de données
-        $pdo = Connect::seConnecter();
-
-        // requete pour recupere le titre année de sortie, l'affiche, le synopsis,nom et prenom du realisateur
-        $sqlFilm = "
-        SELECT titre,anneeSortieFrance,affiche,synopsis,nom,prenom
-        FROM film ,realisateur,acteur ,personne 
-        WHERE film.id_realisateur = realisateur.id_realisateur
-        AND realisateur.id_personne = personne.id_personne
-        AND film.id_film = :id
-        GROUP BY film.id_film
-        ORDER BY anneeSortieFrance DESC";
-        $filmsStatement = $pdo->prepare($sqlFilm);
-        $filmsStatement->execute(["id" => $id]); // permet de recupere les enregistrement du film grace au id en parametre de la fonction
-        $requeteFilm = $filmsStatement->fetchAll();
-
-        // requete pour recupere le genre
-        $sqlGenre = "
-        SELECT genreLibelle
-        FROM film ,genre,genrefilm 
-        WHERE film.id_film = genrefilm.id_film
-        AND genrefilm.id_genre = genre.id_genre
-        AND film.id_film = :id";
-        $genreStatement = $pdo->prepare($sqlGenre);
-        $genreStatement->execute(["id" => $id]);
-        $requeteGenre = $genreStatement->fetchAll();
-
-        // requete pour recupere les nom et prenom de tous les acteurs
-        $sqlCasting = "
-        SELECT nom,prenom, nomPersonnage
-        FROM film ,acteur,personne ,jouer, role
-        WHERE film.id_film = jouer.id_film
-        AND jouer.id_acteur = acteur.id_acteur
-        AND acteur.id_personne = personne.id_personne
-        AND role.id_role = jouer.id_role
-        AND jouer.id_film = :id
-        ORDER BY anneeSortieFrance DESC;";
-        $castingStatement = $pdo->prepare($sqlCasting);
-        $castingStatement->execute(["id" => $id]);
-        $requeteCasting = $castingStatement->fetchAll();
-
-        // va rediriger vers la page description
-        require "view/description.php";
-    }
-
-    // redirige a la page d'ajout de personnage
+    /* Methode ajouterCastingPage()
+        1. On envoie une requête SQL à la bdd
+        2. On stocke la réponse d'une requête SQL dans une variale
+    */
     public function ajouterCastingPage() {
-        $pdo = Connect::seConnecter();
+        $pdo = Connect::seConnecter(); // On se connect a la base de données
 
-        // requête pour recupere tous les titre de film
-        $sqlCasting = "
+        // \/ Etape 2     \/ Etape 1 (la requête recupere tout les titre dans la bdd) 
+        $requeteFilm = $pdo->query( "
         SELECT titre 
-        FROM film";
-        $castingStatement = $pdo->prepare($sqlCasting);
-        $castingStatement->execute();
-        $requeteFilm = $castingStatement->fetchAll();
-
-        // requête pour recupere tous les nom de personnage des role
-        $sqlRole = "
-        SELECT nomPersonnage 
-        FROM role";
-        $roleStatement = $pdo->prepare($sqlRole);
-        $roleStatement->execute();
-        $requeteRole = $roleStatement->fetchAll();
-
-        // requête pour recupere tous les nom et prenom de toute les personne
-        $sqlCasting = "
+        FROM film");
+        
+        // \/ Etape 2     \/ Etape 1 (la requête recupere tout les nom, prenom dans la bdd) 
+        $requeteActeur = $pdo->query( "
         SELECT nom,prenom 
-        FROM personne";
-        $castingStatement = $pdo->prepare($sqlCasting);
-        $castingStatement->execute();
-        $requeteActeur = $castingStatement->fetchAll();
+        FROM personne");
 
-        $sqlRole = "
+        // \/ Etape 2     \/ Etape 1 (la requête recupere tout les role dans la bdd) 
+        $requeteRole = $pdo->query( "
         SELECT nomPersonnage
-        FROM role"; 
-        $roleStatement = $pdo->prepare($sqlRole);
-        $roleStatement->execute();
-        $requeteRole = $roleStatement->fetchAll();
+        FROM role");
 
         require "view/ajouterCastingPage.php"; // redirige vers la page ajouterCastingPage
     }
 
-    // redirige a la page d'ajout d'un film
+    // /!\ faire le commentaire 
+    /* Methode ajouterFilmPage()
+        
+    */
     public function ajouterFilmPage() {
-        $pdo = Connect::seConnecter();
-        // requête pour recupere tous les titre de film
-        $sqlReal = "
+        $pdo = Connect::seConnecter(); // On se connect a la base de données
+
+        // \/ Etape 2     \/ Etape 1 (la requête recupere tout les nom et prenom des réalisateur dans la bdd) 
+        $requeteReal =$pdo->query( "
         SELECT nom,prenom 
         FROM personne,realisateur
-        WHERE personne.id_personne = realisateur.id_personne";
-        $realStatement = $pdo->prepare($sqlReal);
-        $realStatement->execute();
-        $requeteReal = $realStatement->fetchAll();
+        WHERE personne.id_personne = realisateur.id_personne");
 
-        // requête pour recupere tous les titre de film
-        $sqlGenre = "
+        // \/ Etape 2     \/ Etape 1 (la requête recupere tout les nom des genres dans la bdd) 
+        $requeteGenre = $pdo->query( "
         SELECT genreLibelle
-        FROM genre";
-        $genreStatement = $pdo->prepare($sqlGenre);
-        $genreStatement->execute();
-        $requeteGenre = $genreStatement->fetchAll();
-        require "view/ajouterFilmPage.php";
+        FROM genre");
+
+        require "view/ajouterFilmPage.php";// redirige vers la page ajouterFilmPage
     }
 
-    // ------------------------------------------------------ methode qui envoie des information vers la bdd ------------------------------------------------------
-    // ajoue a la bdd une personne
-    public function ajouterPersonne() {
-        $pdo = Connect::seConnecter();
 
+    /* Methode ajouterPersonne()
+        1. executer une requête SQL qui va ajouter une personne. On mettra dans VALUES les variable 
+        qu'on a recu du formulaires de ajouterPersonnePage et qu'on a filtré.
+        
+        2. On crée une condition if si le metier est acteur alors execute Etape 3 sinon si le metier est réalisateur
+        alors execute Etape 4
+        
+        3. executer une requête SQL qui va ajouter une personne en tant qu'acteur
+        
+        4. executer une requête SQL qui va ajouter une personne en tant que réalisateur
+    */
+    public function ajouterPersonne() {
+        $pdo = Connect::seConnecter(); // On se connect a la base de données
+
+        // Filtre les caracter spéciaux pour eviter d'injecter du code
         $nom = filter_var($_POST['nom'], FILTER_SANITIZE_FULL_SPECIAL_CHARS);
         $prenom = filter_var($_POST['prenom'], FILTER_SANITIZE_FULL_SPECIAL_CHARS);
         $sexe = filter_var($_POST['sexe'], FILTER_SANITIZE_FULL_SPECIAL_CHARS);
         $dateNaissance = filter_var($_POST['dateNaissance'], FILTER_SANITIZE_NUMBER_INT);
+        $metier = filter_var($_POST['metier'], FILTER_SANITIZE_NUMBER_INT);
 
-        // requête pour ajouter une personne à la bdd 
+        // \/ Etape 1
         $sqlPersonne = "
         INSERT INTO `cinema`.`personne` ( `nom`, `prenom`, `sexe`, `dateNaissance`) 
-        VALUES ('".$nom."', '".$prenom ."', '".$sexe."', '".$dateNaissance."');";
+        VALUES ('$nom', '$prenom ', '$sexe', '$dateNaissance');";
         $personnesStatement = $pdo->prepare($sqlPersonne);
         $personnesStatement->execute();
 
-        // en fonction de si on a choisie acteur ou realisateur ajoutere la personne en tant que telle
-        if($_POST['metier']== 'acteur'){
+        // \/ Etape 2
+        if($metier == 'acteur'){
 
-            // requête pour ajouter la personne dans la table acteur
+            // \/ Etape 3
             $sqlActeur = "
             INSERT INTO `cinema`.`acteur`(`id_personne`)
             SELECT id_personne 
             FROM personne
-            WHERE nom = '".$nom."';
-            AND prenom = '".$prenom."';";
+            WHERE nom = '$nom';
+            AND prenom = '$prenom';";
             $acteurStatement = $pdo->prepare($sqlActeur);
             $acteurStatement->execute();
 
+        // \/ Etape 2.5
         }elseif($_POST['metier']== 'realisateur'){
 
-            // requête pour ajouter la personne dans la table realisasateur
+            // \/ Etape 4
             $sqlReal = "
             INSERT INTO `cinema`.`realisateur`(`id_personne`)
             SELECT id_personne 
@@ -179,16 +216,38 @@ class CinemaController{
         require "view/ajouterPersonnePage.php"; // redirige vers la page ajouterPersonnePage
     }
     
-    // ajoute ajoute un acteur avec son role d'un dans la bdd
-    public function ajouterCasting() {
-        $pdo = Connect::seConnecter();
+    // FONCTION QUI AJOUTE DES ELEMENT A LA BDD [!]
+    /* Methode ajouterCasting()
+        1. executer une requête SQL qui va recuperer tout les information qui nous permttra de savoir si le casting
+        n'exitse pas déjà. Ce qui signifie que la réoinse contiendra des info si l'acteur ne joue pas déjà le role dans le film
+        
+        2. Condition if qui verifie que la requête de l'etape 1 ne contient rien pour executer l'étape 3
+        sinon affiche "casting deja fait"
+        
+        3.1. Nous appelons la methodes ajouterRole() d'instance $ctrlCinema.Cet methode envoie une requête SQL a la bdd.
+        Elle va ajouté le role dans la bdd sinon afficher un message que le role a déjà été ajouté
 
+        3.2 executer une requête SQL qui va ajouter le casting à la bdd.
+        -La requête insere dans la bdd l'id_film, id_acteur, id_role. 
+        -Pour obtenir l'id nous allons Faire un SELECT de ces id.
+        -Chaque id aura un ALIAS 
+        -Ces ALIAS nous permtra avec HAVING de executer des sous requête.
+        -Ces sous requête filterons en fonction de nos variables.Ex: la sous requete pour le film nous donnera 
+        l'id du film en fonction du nom du film dans le WHERE
+
+
+    */
+    public function ajouterCasting() {
+        $pdo = Connect::seConnecter(); // On se connect a la base de données
+        $ctrlCinema = new CinemaController();// Etape 2.
+        // Filtre les caracter spéciaux pour eviter d'injecter du code
         $film = filter_var($_POST['film'], FILTER_SANITIZE_FULL_SPECIAL_CHARS);
         $role = filter_var($_POST['role'], FILTER_SANITIZE_FULL_SPECIAL_CHARS);
         $acteurPrenom = filter_var($_POST['acteurPrenom'], FILTER_SANITIZE_FULL_SPECIAL_CHARS);
         $acteurNom = filter_var($_POST['acteurNom'], FILTER_SANITIZE_FULL_SPECIAL_CHARS);
         
-        $requeteCheckCasting =  "
+        // \/ Etape 1
+        $requeteCheckCasting = $pdo->query( "
         SELECT jouer.id_acteur, jouer.id_film,jouer.id_role
         FROM jouer,acteur,role,personne,film
         WHERE jouer.id_acteur = acteur.id_acteur
@@ -196,22 +255,19 @@ class CinemaController{
         AND jouer.id_role = role.id_role
         AND jouer.id_film = film.id_film
 
-        AND nom = 'Dern'
-        AND prenom = 'Laura'
-        AND titre = 'Jurassic Park'
-        AND nomPersonnage = 'lola';";
-        $checkCastingStatement = $pdo->prepare($requeteCheckCasting);
-        $checkCastingStatement->execute();
-        $requeteCheckCasting = $checkCastingStatement->fetchAll();
+        AND nom = '$acteurPrenom'
+        AND prenom = '$acteurPrenom'
+        AND titre = '$film'
+        AND nomPersonnage = '$role';");
 
+        // \/ Etape 2
         if($requeteCheckCasting == null){
-            $sqlAddRole = "
-            INSERT INTO `cinema`.`role` (`nomPersonnage`) 
-            VALUES ( '$role');";
-            
-            $addRoleStatement = $pdo->prepare($sqlAddRole);
-            $addRoleStatement->execute();
-
+            // \/ Etape 3.1
+            $role = $ctrlCinema -> ajouterRole($role);
+            if($role == "role deja ajouter"){
+                echo $role;
+            }
+            // \/ Etape 3.1
             $sqlCasting = "
             INSERT INTO `cinema`.`jouer` (`id_film`, `id_acteur`, `id_role`)
     
@@ -244,32 +300,48 @@ class CinemaController{
         require "view/ajouterCastingPage.php"; // redirige vers la page ajouterCastingPage
     }
 
-    // ajoute ajoute un acteur avec son role d'un dans la bdd
-    public function ajouterRole() {
-        $pdo = Connect::seConnecter();
-        // filtre pour eviter d'injecter du code
-        $role = filter_var($_POST['role'], FILTER_SANITIZE_FULL_SPECIAL_CHARS);
+
+    /* Methode ajouterRole($role)
+        1. execute une requête SQL qui va recuperer tout les role dans la bdd
+
+        2. Condition if qui verifie que la requête de l'etape 1 ne contient rien
+
+        3. execute une requête SQL qui va ajouter le role
+    */
+    public function ajouterRole($role) {
+        $pdo = Connect::seConnecter(); // On se connect a la base de données
         
-        // requête pour vérifier que genre n'est pas déjà dans la bdd
+        // \/ Etape 1
         $requeteCheckRole = $pdo->query( "
         SELECT nomPersonnage
         FROM role
         WHERE  nomPersonnage = '$role';");
 
-        // boucle si $requeteCheckRole est null alors on ajouter le role
+        // \/ Etape 2
         if($requeteCheckRole == NULL){
             // requete pour ajouter un role
             $sqlRole= "
             INSERT INTO `cinema`.`role` (`nomPersonnage`) 
-            VALUES ('".$role."');";
+            VALUES ('$role');";
             $roleStatement = $pdo->prepare($sqlRole);
             $roleStatement->execute();
+        }else{
+            return 'role deja ajouter';
         }
-
-        require "view/ajouterCastingPage.php";// redirige vers la page ajouterCastingPage
     }
 
-    // ajoute ajoute un acteur avec son role d'un dans la bdd
+
+    /* Methode ajouterFilm()
+        1.1. execute une requête SQL qui va récupere les nom des genre en fonction du nom du genre qu'on va ajouter avec le film
+        1.2. Condition if verife la requete précédent, si la valuer est null ajoute le genre a la bdd
+
+        2.1. execute une requête SQL qui va récupere les nom des film en fonction du nom du film qu'on va ajouter avec le film
+        2.2. Condition if verife la requete précédent, si la valuer est null ajoute le film a la bdd
+
+        3. execute une requête SQL qui va ajouté à la bdd le film(titre,annee sortie,rea...)
+
+        4. execute une requête SQL qui va ajouté à la bdd le genre du film
+        */
     public function ajouterFilm() {
 
         $pdo = Connect::seConnecter();
@@ -307,13 +379,13 @@ class CinemaController{
             }
         }
 
-        // requête pour vérifier que genre n'est pas déjà dans la bdd
+        // \/ Etape 1.1
         $requeteCheckGenre = $pdo->query( "
         SELECT genreLibelle
         FROM genre
         WHERE  genreLibelle = '$genre';");
 
-        // boucle si $requeteCheckGenre est null alor on ajouter le genre
+        // \/ Etape 1.2
         if($requeteCheckGenre == NULL){
             //requete pour ajouter un genre 
             $sqlGenre= "
@@ -323,26 +395,26 @@ class CinemaController{
             $genreStatement->execute();
         }
 
-        // requête pour vérifier que film n'est pas déjà dans la bdd
+        // \/ Etape 2.1
         $requeteCheckFilm = $pdo->query(  "
         SELECT titre
         FROM film
         WHERE  titre = '$titre';");
 
-        // boucle si $requeteCheckFilm est null alors on ajouter le film
+        // \/ Etape 2.2
         if($requeteCheckFilm ==NULL){
-            // requete pour ajouter un film 
-            $sqlGenre= "
+            // \/ Etape 3
+            $sqlFilm= "
             INSERT INTO `cinema`.`film` (`titre`, `anneeSortieFrance`,`duree`,`etoile` ,`synopsis` , `affiche` ,`id_realisateur`) 
             SELECT '$titre', $anneeSortie, $duree,$etoile,'$synopsis','$affiche',id_realisateur
             FROM realisateur,personne
             WHERE realisateur.id_personne = personne.id_personne 
             AND nom = '$prenomReal'
             AND prenom = '$nomReal'";
-            $genreStatement = $pdo->prepare($sqlGenre);
-            $genreStatement->execute();
+            $filmStatement = $pdo->prepare($sqlFilm);
+            $filmStatement->execute();
 
-            // requete pour ajouter un genre au film 
+            // \/ Etape 4
             $sqlGenreFilm= "
             INSERT INTO `cinema`.`genrefilm` (`id_film`, `id_genre`)
             SELECT film.id_film,genre.id_genre
@@ -358,5 +430,104 @@ class CinemaController{
         require "view/ajouterFilmPage.php";// redirige vers la page ajouterCastingPage
     }
 
-}
+    /* Methode descModification($id)
+        1. Condition if qui verifier que le titre est bien present
+    */
+    public function descModification($id) {
+        $ctrlCinema = new CinemaController();
+        $pdo = Connect::seConnecter();
+        $titre = filter_var($_POST['titre'], FILTER_SANITIZE_FULL_SPECIAL_CHARS);
+        $nomReal = filter_var($_POST['nomReal'], FILTER_SANITIZE_FULL_SPECIAL_CHARS);
+        $prenomReal = filter_var($_POST['prenomReal'], FILTER_SANITIZE_FULL_SPECIAL_CHARS);
 
+        if($titre != Null){
+            $sqlUpdateTitre="
+            UPDATE `cinema`.`film` 
+            SET `titre`='$titre' 
+            WHERE  `id_film`=$id;";
+            $updateTitreStatement = $pdo->prepare($sqlUpdateTitre);
+            $updateTitreStatement->execute();
+        }
+
+        if($nomReal != Null && $prenomReal != Null){
+            $sqlUpdateTitre="
+            UPDATE film
+            SET id_realisateur =  (
+                SELECT id_realisateur
+                
+                FROM realisateur,personne
+                WHERE realisateur.id_personne = personne.id_personne
+                
+                AND nom='$nomReal'
+                AND prenom='$prenomReal')
+                
+            WHERE  id_film=$id;";
+            $updateTitreStatement = $pdo->prepare($sqlUpdateTitre);
+            $updateTitreStatement->execute();
+        }
+
+        $ctrlCinema -> descModificationPage($id);
+    }
+
+
+    // FONCTION QUI SONT UTILISER PAR D'AUTRE FOCNTION [!]
+
+    /* METHODE recuperGenreFilm($id)
+        execute une requête SQL qui récuper le genre du film. la fonction a pour parametre $id.
+        graçe à ça en pourra l'utiliser pour trouver le film dans la requête
+    */
+    public function recuperGenreFilm($id) {
+        $pdo = Connect::seConnecter(); // se connecte  a la bdd
+
+        $sqlGenre = "
+        SELECT genreLibelle
+        FROM film ,genre,genrefilm 
+        WHERE film.id_film = genrefilm.id_film
+        AND genrefilm.id_genre = genre.id_genre
+        AND film.id_film = :id";
+        $genreStatement = $pdo->prepare($sqlGenre);
+        $genreStatement->execute(["id" => $id]);
+        return $genreStatement->fetchAll();
+    }
+    
+    /* METHODE recuperCastingFilm($id)
+        execute une requête SQL qui récuper le casting du film. la fonction a pour parametre $id.
+        graçe à ça en pourra l'utiliser pour trouver le film dans la requête
+    */
+    public function recuperCastingFilm($id) {
+        $pdo = Connect::seConnecter();
+        // requete pour recupere le genre
+        $sqlCasting = "
+        SELECT nom,prenom, nomPersonnage
+        FROM film ,acteur,personne ,jouer, role
+        WHERE film.id_film = jouer.id_film
+        AND jouer.id_acteur = acteur.id_acteur
+        AND acteur.id_personne = personne.id_personne
+        AND role.id_role = jouer.id_role
+        AND jouer.id_film = :id
+        ORDER BY anneeSortieFrance DESC;";
+        $castingStatement = $pdo->prepare($sqlCasting);
+        $castingStatement->execute(["id" => $id]);
+        return $castingStatement->fetchAll();
+    }
+
+    /* METHODE recuperDescFilm($id)
+        execute une requête SQL qui récuper le genre du film. la fonction a pour parametre $id.
+        graçe à ça en pourra l'utiliser pour trouver le film dans la requête
+    */
+    public function recuperDescFilm($id) {
+        $pdo = Connect::seConnecter();
+        // requete pour recupere le genre
+        $sqlFilm = "
+        SELECT titre,anneeSortieFrance,affiche,synopsis,nom,prenom
+        FROM film ,realisateur,acteur ,personne 
+        WHERE film.id_realisateur = realisateur.id_realisateur
+        AND realisateur.id_personne = personne.id_personne
+        AND film.id_film = :id
+        GROUP BY film.id_film
+        ORDER BY anneeSortieFrance DESC";
+        $filmsStatement = $pdo->prepare($sqlFilm);
+        $filmsStatement->execute(["id" => $id]);
+        return $filmsStatement->fetchAll();
+    }
+}
