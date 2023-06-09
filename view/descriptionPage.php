@@ -2,6 +2,7 @@
 
 <p> description du film</p>
 
+<a href="index.php?action=descModificationPage&id=<?= $idFilm ?>">Modifier</a>
 
 <div>
 <?php 
@@ -18,10 +19,8 @@ foreach($requeteFilm as $desc){ ?>
         Réalisateur : <br> -<?= $desc['nom'] .' '.$desc['prenom'] ?></br>
         
         acteur : </br>
-        
         <?php // affiche les acteur
             foreach($requeteCasting as $casting){?>
-
                 - <?= $casting['nom'] .' '.$casting['prenom'] .' role :'.$casting['nomPersonnage'] ?><br>
 
             <?php }
