@@ -17,11 +17,13 @@ if(isset($_GET["action"])){
         case "description" : $ctrlCinema -> description($_GET['id']); break;
         case "ajouterCastingPage" : $ctrlCinema -> ajouterCastingPage(); break;
         case "ajouterFilmPage" : $ctrlCinema -> ajouterFilmPage(); break;
+        case "descModificationPage" : $ctrlCinema -> descModificationPage($_GET['id']); break;
 
         // case avec des methode qui envoie des information vers la bdd
         case "ajouterPersonne" : $ctrlCinema -> ajouterPersonne();  break;
         case "ajouterCasting" : $ctrlCinema -> ajouterCasting();  break;
         case "ajouterFilm" : $ctrlCinema -> ajouterFilm(); break;
+        case "descModification" : $ctrlCinema -> descModification($_GET['id']); break;
 
     }
 }
