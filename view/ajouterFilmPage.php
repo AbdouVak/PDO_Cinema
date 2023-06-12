@@ -9,6 +9,16 @@
     <label for="titre">Titre:</label>
     <input type="text" name="titre" required minlength="3" maxlength="20" size="10"><br><br>
 
+    <label for="nomReal">Nom réalisateur:</label>
+    <input type="text" name="nomReal" list="nomList" required minlength="3" maxlength="20" size="10">
+    <datalist id="nomList"><?php 
+        // boucle pour affiche les genre un par un
+        foreach($requeteRealNom as $realNom){?>
+            <option><?= $realNom["nom"]?></option>
+    	    <?php 
+        }?>
+    </datalist><br><br>
+
     <!-- +----------------------------------------+  -->
     <!-- |   Prénom Réalisateur :  [        \/ ]  |  -->
     <!-- +----------------------------------------+  -->
@@ -16,24 +26,12 @@
     <input type="text" name="prenomReal" list="prenomList" required minlength="3" maxlength="20" size="10">
     <datalist id="prenomList"><?php 
         // boucle pour affiche les genre un par un
-        foreach($requeteReal as $real){?>
-            <option><?= $real["nom"]?></option>
+        foreach($requeteRealPrenom as $realPrenom){?>
+            <option><?= $realPrenom["prenom"]?></option>
     	    <?php 
         }?>
     </datalist><br><br>
 
-    <!-- +----------------------------------------+  -->
-    <!-- |   Nom Réalisateur :  [        \/ ]     |  -->
-    <!-- +----------------------------------------+  -->
-    <label for="nomReal">Nom réalisateur:</label>
-    <input type="text" name="nomReal" list="nomList" required minlength="3" maxlength="20" size="10">
-    <datalist id="nomList"><?php 
-        // boucle pour affiche les genre un par un
-        foreach($requeteReal as $real){?>
-            <option><?= $real["prenom"]?></option>
-    	    <?php 
-        }?>
-    </datalist><br><br>
 
     <!-- +----------------------------------------+  -->
     <!-- |   Genre :  [        \/ ]               |  -->

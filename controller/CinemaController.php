@@ -124,9 +124,16 @@ class CinemaController{
         FROM film");
         
         // \/ Etape 2     \/ Etape 1 (la requête recupere tout les nom, prenom dans la bdd) 
-        $requeteActeur = $pdo->query( "
-        SELECT nom,prenom 
-        FROM personne");
+        $requeteActeurNom =$pdo->query( "
+        SELECT nom
+        FROM personne,acteur
+        WHERE personne.id_personne = acteur.id_personne");
+        
+        // \/ Etape 2     \/ Etape 1 (la requête recupere tout les nom, prenom dans la bdd) 
+        $requeteActeurPrenom =$pdo->query( "
+        SELECT prenom
+        FROM personne,acteur
+        WHERE personne.id_personne = acteur.id_personne");
 
         // \/ Etape 2     \/ Etape 1 (la requête recupere tout les role dans la bdd) 
         $requeteRole = $pdo->query( "
@@ -144,11 +151,15 @@ class CinemaController{
         $pdo = Connect::seConnecter(); // On se connect a la base de données
 
         // \/ Etape 2     \/ Etape 1 (la requête recupere tout les nom et prenom des réalisateur dans la bdd) 
-        $requeteReal =$pdo->query( "
-        SELECT nom,prenom 
+        $requeteRealNom =$pdo->query( "
+        SELECT nom
         FROM personne,realisateur
         WHERE personne.id_personne = realisateur.id_personne");
 
+        $requeteRealPrenom =$pdo->query( "
+        SELECT prenom
+        FROM personne,realisateur
+        WHERE personne.id_personne = realisateur.id_personne");
         // \/ Etape 2     \/ Etape 1 (la requête recupere tout les nom des genres dans la bdd) 
         $requeteGenre = $pdo->query( "
         SELECT genreLibelle
@@ -187,7 +198,7 @@ class CinemaController{
         $personnesStatement->execute();
 
         // \/ Etape 2
-        if($metier == 'acteur'){
+        if($_POST['metier'] == 'acteur'){
 
             // \/ Etape 3
             $sqlActeur = "
@@ -247,7 +258,7 @@ class CinemaController{
         $acteurNom = filter_var($_POST['acteurNom'], FILTER_SANITIZE_FULL_SPECIAL_CHARS);
         
         // \/ Etape 1
-        $requeteCheckCasting = $pdo->query( "
+        $requeteCheckCasting = "
         SELECT jouer.id_acteur, jouer.id_film,jouer.id_role
         FROM jouer,acteur,role,personne,film
         WHERE jouer.id_acteur = acteur.id_acteur
@@ -258,14 +269,18 @@ class CinemaController{
         AND nom = '$acteurPrenom'
         AND prenom = '$acteurPrenom'
         AND titre = '$film'
-        AND nomPersonnage = '$role';");
+        AND nomPersonnage = '$role';";
+
+        $CheckCastingStatement = $pdo->prepare($requeteCheckCasting);
+        $CheckCastingStatement->execute();
+        $CheckCasting =  $CheckCastingStatement->fetchAll();
 
         // \/ Etape 2
-        if($requeteCheckCasting == null){
+        if($CheckCasting == null){
             // \/ Etape 3.1
-            $role = $ctrlCinema -> ajouterRole($role);
+            $checkRole = $ctrlCinema -> ajouterRole($role);
             if($role == "role deja ajouter"){
-                echo $role;
+                echo $checkRole;
             }
             // \/ Etape 3.1
             $sqlCasting = "
@@ -281,9 +296,8 @@ class CinemaController{
     
             AND idRole IN (
             SELECT id_role 
-            FROM role,acteur 
-            WHERE role.id_role
-            AND nomPersonnage = '$role')
+            FROM role
+            WHERE  nomPersonnage = '$role')
                         
             AND idActeur IN (
             SELECT id_acteur 
@@ -312,13 +326,15 @@ class CinemaController{
         $pdo = Connect::seConnecter(); // On se connect a la base de données
         
         // \/ Etape 1
-        $requeteCheckRole = $pdo->query( "
+        $requeteCheckRole =  "
         SELECT nomPersonnage
         FROM role
-        WHERE  nomPersonnage = '$role';");
-
+        WHERE  nomPersonnage = '$role';";
+        $CheckRoleStatement = $pdo->prepare($requeteCheckRole);
+        $CheckRoleStatement->execute();
+        $CheckRole =  $CheckRoleStatement->fetchAll();
         // \/ Etape 2
-        if($requeteCheckRole == NULL){
+        if($CheckRole == NULL){
             // requete pour ajouter un role
             $sqlRole= "
             INSERT INTO `cinema`.`role` (`nomPersonnage`) 
@@ -359,7 +375,6 @@ class CinemaController{
         // filtre pour verifier que le fichier est bien une image puis le stock
         $affiche = 0;
         if(isset($_FILES['file'])){
-            echo "image";
             $tmpName = $_FILES['file']['tmp_name'];
             $name = $_FILES['file']['name'];    //stock le nom de l'image
             $size = $_FILES['file']['size'];    //stock la valeur de la taille de l'image
@@ -380,13 +395,17 @@ class CinemaController{
         }
 
         // \/ Etape 1.1
-        $requeteCheckGenre = $pdo->query( "
+        $requeteCheckGenre = "
         SELECT genreLibelle
         FROM genre
-        WHERE  genreLibelle = '$genre';");
+        WHERE  genreLibelle = '$genre';";
+        $CheckGenreStatement = $pdo->prepare($requeteCheckGenre);
+        $CheckGenreStatement->execute();
+        $checkGenre =  $CheckGenreStatement->fetchAll();
 
         // \/ Etape 1.2
-        if($requeteCheckGenre == NULL){
+        if($checkGenre == NULL){
+            echo "yes genre";
             //requete pour ajouter un genre 
             $sqlGenre= "
             INSERT INTO `cinema`.`genre` (`genreLibelle`) 
@@ -396,21 +415,25 @@ class CinemaController{
         }
 
         // \/ Etape 2.1
-        $requeteCheckFilm = $pdo->query(  "
+        $requeteCheckFilm =  "
         SELECT titre
         FROM film
-        WHERE  titre = '$titre';");
+        WHERE  titre = '$titre';";
+        $CheckFilmStatement = $pdo->prepare($requeteCheckFilm);
+        $CheckFilmStatement->execute();
+        $checkFILM =  $CheckFilmStatement->fetchAll();
 
         // \/ Etape 2.2
-        if($requeteCheckFilm ==NULL){
+        if($checkFILM ==NULL){
+            echo "yes film";
             // \/ Etape 3
             $sqlFilm= "
             INSERT INTO `cinema`.`film` (`titre`, `anneeSortieFrance`,`duree`,`etoile` ,`synopsis` , `affiche` ,`id_realisateur`) 
-            SELECT '$titre', $anneeSortie, $duree,$etoile,'$synopsis','$affiche',id_realisateur
+            SELECT '$titre', '$anneeSortie', '$duree','$etoile','$synopsis','',realisateur.id_realisateur
             FROM realisateur,personne
             WHERE realisateur.id_personne = personne.id_personne 
-            AND nom = '$prenomReal'
-            AND prenom = '$nomReal'";
+            AND personne.nom = '$nomReal'
+            AND personne.prenom = '$prenomReal'";
             $filmStatement = $pdo->prepare($sqlFilm);
             $filmStatement->execute();
 
@@ -423,8 +446,6 @@ class CinemaController{
             AND genre.genreLibelle ='$genre'";
             $genreFilmStatement = $pdo->prepare($sqlGenreFilm);
             $genreFilmStatement->execute();
-        }else{
-            echo "Film deja dans la base de données";
         }
 
         require "view/ajouterFilmPage.php";// redirige vers la page ajouterCastingPage

@@ -35,7 +35,7 @@
     <input type="text" name="acteurNom" list="acteurNomList" required minlength="3" maxlength="20" size="10">
     <datalist id="acteurNomList"><?php 
         // boucle pour affiche les acteur un par un
-        foreach($requeteActeur as $acteur){?>
+        foreach($requeteActeurNom as $acteur){?>
             <option><?= $acteur["nom"]?></option>
         <?php }?>
     </datalist><br><br>
@@ -47,7 +47,7 @@
     <input type="text" name="acteurPrenom" list="acteurPrenomList" required minlength="3" maxlength="20" size="10">
     <datalist id="acteurPrenomList"><?php 
         // boucle pour affiche les acteur un par un
-        foreach($requeteActeur as $acteur){?>
+        foreach($requeteActeurPrenom as $acteur){?>
             <option> <?= $acteur["prenom"]?> </option>
         <?php }?>
     </datalist><br><br>
