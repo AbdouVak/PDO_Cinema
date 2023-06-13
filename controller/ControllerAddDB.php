@@ -5,7 +5,7 @@ use Model\Connect;
 
 class ControllerAddDB{
     
-        /* Methode ajouterPersonne()
+    /* Methode ajouterPersonne()
         1. executer une requête SQL qui va ajouter une personne. On mettra dans VALUES les variable 
         qu'on a recu du formulaires de ajouterPersonnePage et qu'on a filtré.
         
@@ -165,7 +165,7 @@ class ControllerAddDB{
         3. execute une requête SQL qui va ajouté à la bdd le film(titre,annee sortie,rea...)
 
         4. execute une requête SQL qui va ajouté à la bdd le genre du film
-        */
+    */
         public function ajouterFilm() {
 
             $pdo = Connect::seConnecter();
