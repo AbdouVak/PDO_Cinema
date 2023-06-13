@@ -31,7 +31,7 @@ class ControllerTakeDB{
         $pdo = Connect::seConnecter();
         // requete pour recupere le genre
         $sqlCasting = "
-        SELECT nom,prenom, nomPersonnage
+        SELECT nom,prenom, nomPersonnage,acteur.id_acteur
         FROM film ,acteur,personne ,jouer, role
         WHERE film.id_film = jouer.id_film
         AND jouer.id_acteur = acteur.id_acteur
@@ -51,7 +51,7 @@ class ControllerTakeDB{
         $pdo = Connect::seConnecter();
         // requete pour recupere le genre
         $sqlFilm = "
-        SELECT titre,anneeSortieFrance,affiche,synopsis,nom,prenom
+        SELECT titre,anneeSortieFrance,affiche,synopsis,nom,prenom,film.id_realisateur
         FROM film ,realisateur,acteur ,personne 
         WHERE film.id_realisateur = realisateur.id_realisateur
         AND realisateur.id_personne = personne.id_personne

@@ -16,13 +16,12 @@ foreach($requeteFilm as $desc){ ?>
         } ?>
 
         titre : <?= $desc['titre'] ?></br>
-        Réalisateur : <br> -<?= $desc['nom'] .' '.$desc['prenom'] ?></br>
+        Réalisateur : <br> -<a href="index.php?action=filmographieRea&id=<?=$desc['id_realisateur']?>"><?= $desc['nom'] .' '.$desc['prenom']  ?></a></br>
         
         acteur : </br>
         <?php // affiche les acteur
             foreach($requeteCasting as $casting){?>
-                - <?= $casting['nom'] .' '.$casting['prenom'] .' role :'.$casting['nomPersonnage'] ?><br>
-
+                - <a href="index.php?action=filmographieAct&id=<?=$casting['id_acteur']?>"><?= $casting['nom'] .' '.$casting['prenom'] ?></a><?=' role :'.$casting['nomPersonnage'] ?><br>
             <?php }
         ?>
 

@@ -27,7 +27,7 @@ foreach($requeteFilm as $desc){ ?>
         <label for="realNom">Réalisateur nom:</label>
         <input type="text" name="nomReal" list="realNomList" value='<?= $desc['nom'] ?>' required minlength="3" maxlength="20" size="10">
         <datalist id="realNomList"><?php 
-            // boucle pour affiche les acteur un par un
+            // boucle 
             foreach($requeteReal as $nom){?>
                 <option><?= $nom["nom"]?></option>
             <?php }?>
@@ -36,7 +36,7 @@ foreach($requeteFilm as $desc){ ?>
         <label for="realPrenom">Réalisateur prenom:</label>
         <input type="text" name="prenomReal" list="realPrenomList" value='<?= $desc['prenom'] ?>' required minlength="3" maxlength="20" size="10">
         <datalist id="realPrenomList"><?php 
-            // boucle pour affiche les acteur un par un
+            // boucle 
             foreach($requeteReal as $acteur){?>
                 <option> <?= $acteur["prenom"]?> </option>
             <?php }?>
@@ -63,7 +63,7 @@ foreach($requeteFilm as $desc){ ?>
             <label for="role">Role :</label>
             <input type="text" name="role" list="roleList" value='<?= $casting['nomPersonnage'] ?>' required minlength="3" maxlength="20" size="10">
             <datalist id="roleList"><?php 
-                // boucle pour affiche les acteur un par un
+                // boucle 
                 foreach($requeteRole as $role){?>
                     <option> <?= $role["nomPersonnage"]?></option>
                 <?php }?>
@@ -73,7 +73,7 @@ foreach($requeteFilm as $desc){ ?>
             <label for="acteurPrenom">Acteur prenom:</label>
             <input type="text" name="acteurPrenom" list="acteurPrenomList" value='<?= $casting['prenom'] ?>' required minlength="3" maxlength="20" size="10">
             <datalist id="acteurPrenomList"><?php 
-                // boucle pour affiche les acteur un par un
+                // boucle 
                 foreach($requeteActeur as $acteur){?>
                     <option> <?= $acteur["prenom"]?></option>
                 <?php }?>
@@ -82,7 +82,7 @@ foreach($requeteFilm as $desc){ ?>
             <label for="acteurNom">Acteur nom:</label>
             <input type="text" name="acteurNom" list="acteurNomList" value='<?= $casting['nom'] ?>' required minlength="3" maxlength="20" size="10">
             <datalist id="acteurNomList"><?php 
-                // boucle pour affiche les acteur un par un
+                // boucle 
                 foreach($requeteActeur as $acteur){?>
                     <option> <?= $acteur["nom"]?></option>
                 <?php }?>
@@ -102,6 +102,7 @@ foreach($requeteFilm as $desc){ ?>
             <input type="submit" value="modifier année" >
         </form><br></br>
 
+        
         <h2>Genre</h2>
         <!-- +-----------------------------------------+  -->
         <!-- |     Genre :                             |  -->
@@ -111,7 +112,7 @@ foreach($requeteFilm as $desc){ ?>
             <?php foreach($requeteGenreFilm as $genreFilm){?><br>
                 <input type="text" name="genre" list="genreList" value='<?= $genreFilm['genreLibelle']?>' required minlength="3" maxlength="20" size="10">
                 <datalist id="genreList"><?php 
-                    // boucle pour affiche les acteur un par un
+                    // boucle 
                     foreach($requeteGenre as $genre){?>
                         <option> <?= $genre["genreLibelle"]?></option>
                     <?php }?>
@@ -119,6 +120,7 @@ foreach($requeteFilm as $desc){ ?>
             <?php }?>
             <input type="submit" value="modifier genre" >
         </form><br></br>
+
 
         <h2>Synopsis</h2>
         <!-- +-----------------------------------------+  -->
@@ -134,6 +136,8 @@ foreach($requeteFilm as $desc){ ?>
         <br><br>
         <input type="submit" value="modifier synopsis" >
         </form>
+
+
         <h2>Poster</h2>
         <!-- +----------------------------------------+  -->
         <!-- |   Affiche :  [      ]                  |  -->
