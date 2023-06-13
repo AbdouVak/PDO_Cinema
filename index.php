@@ -26,9 +26,14 @@ if(isset($_GET["action"])){
         case "ajouterPersonne" : $ctrlAdd -> ajouterPersonne();  break;
         case "ajouterCasting" : $ctrlAdd -> ajouterCasting();  break;
         case "ajouterFilm" : $ctrlAdd -> ajouterFilm(); break;
+        
+        // case modifier information bdd
         case "modifierTitre" : $ctrlUpdate -> modifierTitre($_GET['id']); break;
         case "modifierRealisateur" : $ctrlUpdate -> modifierRealisateur($_GET['id']); break;
-        case "modifierActeur" : $ctrlUpdate -> modifierActeur($_GET['id']); break;
-
+        case "modifierCasting" : $ctrlUpdate -> modifierCasting($_GET['id']); break;
+        case "modifierAnnee" : $ctrlUpdate -> modifierAnnee($_GET['id']); break;
+        case "modifierGenre" : $ctrlUpdate -> modifierGenre($_GET['id']); break;
+        case "modifierSynopsis" : $ctrlUpdate -> modifierSynopsis($_GET['id']); break;
+        case "modifierAffiche" : $ctrlUpdate -> modifierAffiche($_GET['id']); break;
     }
 }
