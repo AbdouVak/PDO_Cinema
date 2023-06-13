@@ -150,8 +150,36 @@ class CinemaController{
         require "view/ajouterFilmPage.php";// redirige vers la page ajouterFilmPage
     }
 
+    public function filmographie($id,$metier) {
+        $pdo = Connect::seConnecter(); // On se connect a la base de données
+        if($metier == 'act'){
+            $sqlTitre = "
+            SELECT titre,anneeSortieFrance,nomPersonnage,affiche
+            FROM role,jouer,film,acteur
+            WHERE role.id_role = jouer.id_role
+            AND film.id_film = jouer.id_film
+            AND acteur.id_acteur = jouer.id_acteur
+            AND acteur.id_acteur = $id";
+            
+            $titreStatement = $pdo->prepare($sqlTitre);
+            $titreStatement->execute();
+            $requeteFilm = $titreStatement->fetchAll(); 
+        }elseif($metier == 'rea'){
+            $sqlTitre = "
+            SELECT titre,anneeSortieFrance,affiche
+            FROM film
+            WHERE film.id_realisateur = $id";
+            
+            $titreStatement = $pdo->prepare($sqlTitre);
+            $titreStatement->execute();
+            $requeteFilm = $titreStatement->fetchAll();
+        }
+        
+        
+        
 
-
+        require "view/filmographiePage.php";// redirige vers la page ajouterFilmPage
+    }
 
 
 }
