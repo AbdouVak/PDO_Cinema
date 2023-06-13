@@ -74,6 +74,9 @@
     <textarea name="synopsis" cols="40" rows="5"></textarea>
     <br><br>
 
+    <!-- +----------------------------------------+  -->
+    <!-- |   Affiche :  [      ]                  |  -->
+    <!-- +----------------------------------------+  -->
     <label for="file"> Affiche film :</label> 
     <input type="file" name="file" >
     <br><br>
