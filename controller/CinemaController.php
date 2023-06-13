@@ -73,13 +73,17 @@ class CinemaController{
 
         $requeteFilm = $ctrlTake ->  recuperDescFilm($id);
 
-        $requeteGenre = $ctrlTake -> recuperGenreFilm($id);
+        $requeteGenreFilm = $ctrlTake -> recuperGenreFilm($id);
 
+        $requeteGenre = $ctrlTake -> recuperGenre();
+        
         $requeteCasting = $ctrlTake -> recuperCastingFilm($id);
 
         $requeteReal = $ctrlTake -> recuperRealisateur();
 
         $requeteActeur = $ctrlTake -> recuperActeur();
+
+        $requeteRole = $ctrlTake ->recuperRole();
 
         require "view/descModificationPage.php"; // va rediriger vers la page description
     }
