@@ -37,8 +37,7 @@ class ControllerTakeDB{
         AND jouer.id_acteur = acteur.id_acteur
         AND acteur.id_personne = personne.id_personne
         AND role.id_role = jouer.id_role
-        AND jouer.id_film = :id
-        ORDER BY anneeSortieFrance DESC;";
+        AND jouer.id_film = :id;";
         $castingStatement = $pdo->prepare($sqlCasting);
         $castingStatement->execute(["id" => $id]);
         return $castingStatement->fetchAll();
@@ -57,8 +56,7 @@ class ControllerTakeDB{
         WHERE film.id_realisateur = realisateur.id_realisateur
         AND realisateur.id_personne = personne.id_personne
         AND film.id_film = :id
-        GROUP BY film.id_film
-        ORDER BY anneeSortieFrance DESC";
+        GROUP BY film.id_film";
         $filmsStatement = $pdo->prepare($sqlFilm);
         $filmsStatement->execute(["id" => $id]);
         return $filmsStatement->fetchAll();
