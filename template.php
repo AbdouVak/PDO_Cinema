@@ -13,6 +13,7 @@
         <a href="index.php?action=ajouterPersonnePage">ajouter personne</a>
         <a href="index.php?action=ajouterCastingPage">ajouter casting</a>
         <a href="index.php?action=ajouterFilmPage">ajouter film</a>
+        <a href="index.php?action=listeActeurPage">liste Acteur</a>
     </nav>
     <div>
         <main>
