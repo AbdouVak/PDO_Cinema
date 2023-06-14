@@ -1,7 +1,7 @@
 <?php ob_start();?>
 
 <!-- formulaires -->
-<form action="index.php?action=ajouterFilm" method="POST" enctype="multipart/form-data">
+<form action="index.php?action=ajouterFilm" method="POST">
     
     <!-- +----------------------------------------+  -->
     <!-- |   Titre :  [              ]            |  -->
@@ -9,10 +9,12 @@
     <label for="titre">Titre:</label>
     <input type="text" name="titre" required minlength="3" maxlength="20" size="10"><br><br>
 
+    <!-- +----------------------------------------+  -->
+    <!-- |   Nom Réalisateur :  [        \/ ]     |  -->
+    <!-- +----------------------------------------+  -->
     <label for="nomReal">Nom réalisateur:</label>
     <input type="text" name="nomReal" list="nomList" required minlength="3" maxlength="20" size="10">
     <datalist id="nomList"><?php 
-        // boucle pour affiche les genre un par un
         foreach($requeteRealNom as $realNom){?>
             <option><?= $realNom["nom"]?></option>
     	    <?php 
@@ -25,7 +27,6 @@
     <label for="prenomReal">Prénom réalisateur:</label>
     <input type="text" name="prenomReal" list="prenomList" required minlength="3" maxlength="20" size="10">
     <datalist id="prenomList"><?php 
-        // boucle pour affiche les genre un par un
         foreach($requeteRealPrenom as $realPrenom){?>
             <option><?= $realPrenom["prenom"]?></option>
     	    <?php 
@@ -34,18 +35,18 @@
 
 
     <!-- +----------------------------------------+  -->
-    <!-- |   Genre :  [        \/ ]               |  -->
+    <!-- |   Genre :  ....[X] ....[ ] ....[ ]     |  -->
+    <!-- |            ....[ ] ....[X] ....[ ]     |  -->
+    <!-- |   Ajouter Genre : [        ]           |  -->
     <!-- +----------------------------------------+  -->
-    <label for="genre">Genre:</label>
-    <input type="text" name="genre" list="genreList" required minlength="3" maxlength="20" size="10">
-    <datalist id="genreList"><?php 
-        // boucle pour affiche les genre un par un
-        foreach($requeteGenre as $genre){?>
-            <option><?= $genre["genreLibelle"]?></option>
-    	    <?php 
-        }?>
-    </datalist><br><br>
-
+    <label for="genre">Genre:</label><?php 
+    foreach($requeteGenre as $genre){?>
+        <label for="genre"><?= $genre["genreLibelle"]?></label>
+        <input type="checkbox" name="genre[]" value="<?= $genre["genreLibelle"]?>">
+        <?php 
+    }?><br></br>
+    <label for="ajouterGenre">Ajouter genre (genre1, genre2, ...):</label>
+    <input type="text" name="ajouterGenre" minlength="3" maxlength="20" size="10"><br><br>
     <!-- +----------------------------------------+  -->
     <!-- |   Année Sortie :  [      ]             |  -->
     <!-- +----------------------------------------+  -->
@@ -64,7 +65,7 @@
     <!-- |   Etoile :  [      ]                   |  -->
     <!-- +----------------------------------------+  -->
     <label for="etoile">étoile (optionnel) :</label>
-    <input type="etoile" name="etoile" required minlength="1" maxlength="1" size="1">
+    <input type="etoile" name="etoile" minlength="1" maxlength="1" size="1">
     <br><br>
 
     <!-- +----------------------------------------+  -->
