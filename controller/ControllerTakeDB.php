@@ -5,11 +5,12 @@ use Model\Connect;
 
 class ControllerTakeDB{
 
-    /* METHODE recuperGenreFilm($id)
+    
+    public function recuperGenreFilm($id) {
+        /* METHODE recuperGenreFilm($id)
         execute une requête SQL qui récuper le genre du film. la fonction a pour parametre $id.
         graçe à ça en pourra l'utiliser pour trouver le film dans la requête
-    */
-    public function recuperGenreFilm($id) {
+        */
         $pdo = Connect::seConnecter(); // se connecte  a la bdd
 
         $sqlGenre = "
@@ -23,11 +24,11 @@ class ControllerTakeDB{
         return $genreStatement->fetchAll();
     }
     
-    /* METHODE recuperCastingFilm($id)
+    public function recuperCastingFilm($id) {
+        /* METHODE recuperCastingFilm($id)
         execute une requête SQL qui récuper le casting du film. la fonction a pour parametre $id.
         graçe à ça en pourra l'utiliser pour trouver le film dans la requête
-    */
-    public function recuperCastingFilm($id) {
+        */
         $pdo = Connect::seConnecter();
         // requete pour recupere le genre
         $sqlCasting = "
@@ -43,11 +44,12 @@ class ControllerTakeDB{
         return $castingStatement->fetchAll();
     }
 
-    /* METHODE recuperDescFilm($id)
+    public function recuperDescFilm($id) {
+        /* METHODE recuperDescFilm($id)
         execute une requête SQL qui récuper le genre du film. la fonction a pour parametre $id.
         graçe à ça en pourra l'utiliser pour trouver le film dans la requête
-    */
-    public function recuperDescFilm($id) {
+        */
+        
         $pdo = Connect::seConnecter();
         // requete pour recupere le genre
         $sqlFilm = "
@@ -62,7 +64,6 @@ class ControllerTakeDB{
         return $filmsStatement->fetchAll();
     }
 
-    
     public function recuperRealisateur() {
         $pdo = Connect::seConnecter();
 
