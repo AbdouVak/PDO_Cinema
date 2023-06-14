@@ -23,6 +23,8 @@ if(isset($_GET["action"])){
         case "descModificationPage" : $ctrlCinema -> descModificationPage($_GET['id']); break;
         case "filmographieRea" : $ctrlCinema -> filmographie($_GET['id'],'rea'); break;
         case "filmographieAct" : $ctrlCinema -> filmographie($_GET['id'],'act'); break;
+        case "listeActeurPage" : $ctrlCinema -> listeActeurPage(); break;
+
         // case avec des methode qui envoie des information vers la bdd
         case "ajouterPersonne" : $ctrlAdd -> ajouterPersonne();  break;
         case "ajouterCasting" : $ctrlAdd -> ajouterCasting();  break;
