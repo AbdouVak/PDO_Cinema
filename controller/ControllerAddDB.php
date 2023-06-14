@@ -37,27 +37,23 @@ class ControllerAddDB{
         if($_POST['metier'] == 'acteur'){
 
             // \/ Etape 3
-            $sqlActeur = "
+            $sqlActeur = $pdo->query("
             INSERT INTO `cinema`.`acteur`(`id_personne`)
             SELECT id_personne 
             FROM personne
             WHERE nom = '$nom';
-            AND prenom = '$prenom';";
-            $acteurStatement = $pdo->prepare($sqlActeur);
-            $acteurStatement->execute();
+            AND prenom = '$prenom';");
 
         // \/ Etape 2.5
         }elseif($_POST['metier']== 'realisateur'){
 
             // \/ Etape 4
-            $sqlReal = "
+            $sqlReal = $pdo->query("
             INSERT INTO `cinema`.`realisateur`(`id_personne`)
             SELECT id_personne 
             FROM personne
             WHERE nom = '".$nom."';
-            AND prenom = '".$prenom."';";
-            $realStatement = $pdo->prepare($sqlReal);
-            $realStatement->execute();
+            AND prenom = '".$prenom."';");
         }
         
         require "view/ajouterPersonnePage.php"; // redirige vers la page ajouterPersonnePage
@@ -122,7 +118,7 @@ class ControllerAddDB{
                 echo $checkRole;
             }
             // \/ Etape 3.1
-            $sqlCasting = "
+            $sqlCasting = $pdo->query("
             INSERT INTO `cinema`.`jouer` (`id_film`, `id_acteur`, `id_role`)
     
             SELECT id_film AS idFilm,id_acteur AS idActeur, id_role AS idRole
@@ -143,9 +139,7 @@ class ControllerAddDB{
                 FROM acteur,personne 
             WHERE acteur.id_personne = personne.id_personne
             AND personne.prenom = '$acteurPrenom'
-            AND personne.nom = '$acteurNom')";
-            $castingStatement = $pdo->prepare($sqlCasting);
-            $castingStatement->execute();
+            AND personne.nom = '$acteurNom')");
         }else{
             echo 'casting deja fait';
         }
@@ -154,32 +148,70 @@ class ControllerAddDB{
     }
 
 
-    
-    /* Methode ajouterFilm()
-        1.1. execute une requête SQL qui va récupere les nom des genre en fonction du nom du genre qu'on va ajouter avec le film
-        1.2. Condition if verife la requete précédent, si la valuer est null ajoute le genre a la bdd
+        
+        /* Methode ajouterFilm()
+            1.1. execute une requête SQL qui va récupere les nom des genre en fonction du nom du genre qu'on va ajouter avec le film
+            1.2. Condition if verife la requete précédent, si la valuer est null ajoute le genre a la bdd
 
-        2.1. execute une requête SQL qui va récupere les nom des film en fonction du nom du film qu'on va ajouter avec le film
-        2.2. Condition if verife la requete précédent, si la valuer est null ajoute le film a la bdd
+            2.1. execute une requête SQL qui va récupere les nom des film en fonction du nom du film qu'on va ajouter avec le film
+            2.2. Condition if verife la requete précédent, si la valuer est null ajoute le film a la bdd
 
-        3. execute une requête SQL qui va ajouté à la bdd le film(titre,annee sortie,rea...)
+            3. execute une requête SQL qui va ajouté à la bdd le film(titre,annee sortie,rea...)
 
-        4. execute une requête SQL qui va ajouté à la bdd le genre du film
-    */
+            4. execute une requête SQL qui va ajouté à la bdd le genre du film
+        */
         public function ajouterFilm() {
 
             $pdo = Connect::seConnecter();
-    
+            $ctrl = new CinemaController();
             // filtre pour eviter d'injecter du code
             $titre = filter_var($_POST['titre'], FILTER_SANITIZE_FULL_SPECIAL_CHARS);
             $anneeSortie = filter_var($_POST['anneeSortie'], FILTER_SANITIZE_NUMBER_INT);
             $duree = filter_var($_POST['duree'], FILTER_SANITIZE_NUMBER_INT);
             $prenomReal = filter_var($_POST['prenomReal'], FILTER_SANITIZE_FULL_SPECIAL_CHARS);
             $nomReal = filter_var($_POST['nomReal'], FILTER_SANITIZE_FULL_SPECIAL_CHARS);
-            $genre = filter_var($_POST['genre'], FILTER_SANITIZE_FULL_SPECIAL_CHARS);
             $etoile = filter_var($_POST['etoile'], FILTER_SANITIZE_NUMBER_INT);
             $synopsis = filter_var($_POST['synopsis'], FILTER_SANITIZE_FULL_SPECIAL_CHARS);
-    
+            $nouveauxGenre= explode( ',', filter_var($_POST['ajouterGenre'], FILTER_SANITIZE_FULL_SPECIAL_CHARS) );
+            // verifie si on a cocher des genre
+            if(isset($_POST['genre'])){
+                // si oui on les sanitize
+                $checkboxGenres = filter_var_array($_POST['genre'],FILTER_SANITIZE_FULL_SPECIAL_CHARS);
+            }
+            $genres = [];
+
+            // -----------------------------
+            foreach($nouveauxGenre as $genre){
+                //requete pour verifier que on ajoute pas deux genre
+                str_replace(' ', '', $genre);
+                $requeteCheckGenre = "
+                SELECT genreLibelle
+                FROM genre
+                WHERE  genreLibelle = '$genre';";
+                $CheckGenreStatement = $pdo->prepare($requeteCheckGenre);
+                $CheckGenreStatement->execute();
+                $checkGenre =  $CheckGenreStatement->fetchAll();
+                //----------------------------------------------
+                if($checkGenre == Null){
+                    $sqlNouveauxGenre= "
+                    INSERT INTO `cinema`.`genre` (`genreLibelle`) 
+                    VALUES ('$genre');";
+                    $nouveauxGenreStatement = $pdo->prepare($sqlNouveauxGenre);
+                    $nouveauxGenreStatement->execute();
+                }
+            }
+            // ----------------
+            foreach($nouveauxGenre as $genre){
+                array_push($genres,$genre);
+            }
+            // ----------------
+            foreach($checkboxGenres as $genre){
+                array_push($genres,$genre);
+            }
+
+
+
+            
             // filtre pour verifier que le fichier est bien une image puis le stock
             $affiche = 0;
             if(isset($_FILES['file'])){
@@ -191,38 +223,17 @@ class ControllerAddDB{
                 $extension = strtolower(end($tabExtension));    //change l'extension en miniscule
                 $extensions = ['jpg', 'png', 'jpeg', 'gif'];    //crée une table avec les extention
                 $maxSize = 400000;                              //Taille max que l'on accepte
-    
+
                 //verifie si les extention sont correct,que la taille est en dessous de la taille max et qu'il n'y a pas d'erreur
                 if(in_array($extension, $extensions) && $size <= $maxSize && $error == 0){
-    
-                    $uniqueName = uniqid('', true);                     // uniqid génère quelque chose comme ca : 5f586bf96dcd38.73540086
-                    $file = $uniqueName.".".$extension;                 // $file = 5f586bf96dcd38.73540086.jpg
+
+                    $file = str_replace(' ', '_', $titre);
                     move_uploaded_file($tmpName, './public/IMG/'.$file);    // deplace le fichier avec un nom unique dans le dossier upload
                     $affiche = $file;                         // Ajoute le nom de l'image avec son extension dans $_SESSION['image']
                 }
             }
-    
-            // \/ Etape 1.1
-            $requeteCheckGenre = "
-            SELECT genreLibelle
-            FROM genre
-            WHERE  genreLibelle = '$genre';";
-            $CheckGenreStatement = $pdo->prepare($requeteCheckGenre);
-            $CheckGenreStatement->execute();
-            $checkGenre =  $CheckGenreStatement->fetchAll();
-    
-            // \/ Etape 1.2
-            if($checkGenre == NULL){
-                echo "yes genre";
-                //requete pour ajouter un genre 
-                $sqlGenre= "
-                INSERT INTO `cinema`.`genre` (`genreLibelle`) 
-                VALUES ('$genre');";
-                $genreStatement = $pdo->prepare($sqlGenre);
-                $genreStatement->execute();
-            }
-    
-            // \/ Etape 2.1
+
+            // ---------------------
             $requeteCheckFilm =  "
             SELECT titre
             FROM film
@@ -230,47 +241,44 @@ class ControllerAddDB{
             $CheckFilmStatement = $pdo->prepare($requeteCheckFilm);
             $CheckFilmStatement->execute();
             $checkFILM =  $CheckFilmStatement->fetchAll();
-    
-            // \/ Etape 2.2
+
+            // ------------------------
             if($checkFILM ==NULL){
-                echo "yes film";
-                // \/ Etape 3
-                $sqlFilm= "
+                
+                $sqlFilm=$pdo->query( "
                 INSERT INTO `cinema`.`film` (`titre`, `anneeSortieFrance`,`duree`,`etoile` ,`synopsis` , `affiche` ,`id_realisateur`) 
                 SELECT '$titre', '$anneeSortie', '$duree','$etoile','$synopsis','$affiche',realisateur.id_realisateur
                 FROM realisateur,personne
                 WHERE realisateur.id_personne = personne.id_personne 
                 AND personne.nom = '$nomReal'
-                AND personne.prenom = '$prenomReal'";
-                $filmStatement = $pdo->prepare($sqlFilm);
-                $filmStatement->execute();
-    
-                // \/ Etape 4
-                $sqlGenreFilm= "
-                INSERT INTO `cinema`.`genrefilm` (`id_film`, `id_genre`)
-                SELECT film.id_film,genre.id_genre
-                FROM film,genre
-                WHERE film.titre = '$titre'
-                AND genre.genreLibelle ='$genre'";
-                $genreFilmStatement = $pdo->prepare($sqlGenreFilm);
-                $genreFilmStatement->execute();
+                AND personne.prenom = '$prenomReal'");
+                // ---------------------------------------
+                foreach($genres as $genre){
+                    
+                    $sqlGenreFilm= $pdo->query("
+                    INSERT INTO `cinema`.`genrefilm` (`id_film`, `id_genre`)
+                    SELECT film.id_film,genre.id_genre
+                    FROM film,genre
+                    WHERE film.titre = '$titre'
+                    AND genre.genreLibelle ='$genre'");
+                    }
             }
-    
-            require "view/ajouterFilmPage.php";// redirige vers la page ajouterCastingPage
+            
+            $ctrl ->ajouterFilmPage();// redirige vers la page ajouterCastingPage
         }
-    
-    
-    
+
+
+
         /* Methode ajouterRole($role)
             1. execute une requête SQL qui va recuperer tout les role dans la bdd
-    
+
             2. Condition if qui verifie que la requête de l'etape 1 ne contient rien
-    
+
             3. execute une requête SQL qui va ajouter le role
         */
         public function ajouterRole($role) {
             $pdo = Connect::seConnecter(); // On se connect a la base de données
-            
+
             // \/ Etape 1
             $requeteCheckRole =  "
             SELECT nomPersonnage
