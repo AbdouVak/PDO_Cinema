@@ -164,15 +164,56 @@ class CinemaController{
     }
 
     public function listeActeurPage() {
-        $ctrlTake = new ControllerTakeDB;
         $pdo = Connect::seConnecter(); // On se connect a la base de données
-        $listeActeur = $ctrlTake ->recuperActeur();
-
-        echo 'LISTE DES ACTEURS<br>';
-        foreach($listeActeur as $acteur){
-            echo '#'.$acteur['nom'].'<br>';
-        }
-
         
+        $sqlActeur = "
+            SELECT nom,prenom,id_acteur
+            FROM personne,acteur
+            WHERE personne.id_personne = acteur.id_personne
+            ORDER BY personne.nom ;";
+        $acteurStatement = $pdo->prepare($sqlActeur);
+        $acteurStatement->execute();
+        $requeteActeur = $acteurStatement->fetchAll();
+
+        $alphabet = array();
+        foreach(range('A','Z') as $i) {
+            $alphabet[] = $i;
+        }
+        require "view/listeActeurPage.php";
+    }
+    public function listeReaPage() {
+        $pdo = Connect::seConnecter(); // On se connect a la base de données
+        
+        $sqlRea = "
+            SELECT nom,prenom,id_realisateur
+            FROM personne,realisateur
+            WHERE personne.id_personne = realisateur.id_personne
+            ORDER BY personne.nom ;";
+        $reaStatement = $pdo->prepare($sqlRea);
+        $reaStatement->execute();
+        $requeteRea = $reaStatement->fetchAll();
+
+        $alphabet = array();
+        foreach(range('A','Z') as $i) {
+            $alphabet[] = $i;
+        }
+        require "view/listeReaPage.php";
+    }
+
+    public function listeGenrePage(){
+        $pdo = Connect::seConnecter(); // On se connect a la base de données
+        $ctrlTake = new ControllerTakeDB();
+
+        $requeteGenre = $ctrlTake -> recuperGenre();
+
+        $sqlFilm = "
+            SELECT titre,anneeSortieFrance,genreLibelle,affiche
+            FROM film,genre,genrefilm
+            WHERE film.id_film = genrefilm.id_film
+            AND genre.id_genre = genrefilm.id_genre";
+        $filmStatement = $pdo->prepare($sqlFilm);
+        $filmStatement->execute();
+        $requeteFilm = $filmStatement->fetchAll();
+        require "view/listeGenrePage.php";
     }
 }
