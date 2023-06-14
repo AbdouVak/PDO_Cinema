@@ -1,12 +1,13 @@
 <?php ob_start();?>
 
-<p> Il y a <?= $requete->rowCount()?> films</p>
+<h2> Il y a <?= $requete->rowCount()?> films</h2>
 
-<div><?php
+<div class='afficheConteneur'><?php
     // boucle pour recupere les info du film. Chaque boucle est un film different
     foreach($requete->fetchAll() as $film){
         ?>
-        <div>
+
+        <div class="affiche">
             <p><?= $film["titre"] ?>-<?= $film["anneeSortieFrance"]?> </p>
             <!-- quand no va appuyer sur l'image redirige vers l'index avec l'action description et id_film du film de la boucle-->
             
@@ -16,8 +17,10 @@
             }else{// sinon on met l'affiche
                 ?><a href='index.php?action=description&id=<?= $film['id_film'] ?>'> <img src='public/img/<?= $film['affiche']?>' width="200"></a><br><?php 
             } ?>
-            </div>
-<?php } ?></div>
+
+        </div><?php 
+    }?>
+</div>
 
 <?php
 $titre = "Acceuil";

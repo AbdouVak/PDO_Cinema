@@ -1,14 +1,17 @@
 <?php ob_start();?>
 
 <!-- formulaires -->
-<form action="index.php?action=ajouterPersonne" method="POST" enctype="multipart/form-data">
+<form action="index.php?action=ajouterPersonne" method="POST" enctype="multipart/form-data" class='formulaires'>
 
     <!-- champ de texte pour le nom de la personne-->
-    <label for="nom">Nom:</label>
-    <input type="text" name="nom" required minlength="3" maxlength="20" size="10">
-    <br><br>
+    <div class="inputConteneurs">
+        <label for="nom">Nom:</label>
+        <input type="text" name="nom" required minlength="3" maxlength="20" size="10">
+        <br><br>
+    </div>
 
     <!-- champ de texte pour le prenom de la personne-->
+
     <label for="name">Prenom:</label>
     <input type="text" name="prenom" required minlength="3" maxlength="20" size="10">
     <br><br>
