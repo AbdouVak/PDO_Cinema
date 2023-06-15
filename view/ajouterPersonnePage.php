@@ -1,7 +1,7 @@
 <?php ob_start();?>
 
-<main><!-- formulaires -->
-
+<!-- formulaires -->
+<div class="formContainer">
 <form action="index.php?action=ajouterPersonne"  method="POST" enctype="multipart/form-data" >
 
     <!-- champ de texte pour le nom de la personne-->
@@ -41,13 +41,12 @@
     </div>
 
     <!-- input pour envoyé le formulaires -->
-    <div class="inputConteneurs">
+    <div class="inputConteneurs center">
         <input type="submit" value="ajouter personne" >
     </div>
 
 </form>
-
-</main>
+</div>
 
 <?php
 $cssCustum = "<link rel='stylesheet' href='public/css/ajouterPersonnePage.css' />";
