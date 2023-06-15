@@ -1,0 +1,22 @@
+.affiche{
+    background-color: brown;
+    border-radius: 5px;
+    padding: 10px;
+    margin: 10px;
+}
+
+.affiche p{
+    color: darkslategray;
+    background-color: rgb(255, 255, 255);
+    padding: 5px;
+    border-radius: 5px;
+    display: flex;
+    justify-content: center;
+}
+
+.afficheConteneur{
+    display: flex;
+    flex-direction: row ;
+    flex-wrap: wrap;
+    gap: 10px 10px;
+}
