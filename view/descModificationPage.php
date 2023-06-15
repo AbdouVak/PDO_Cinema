@@ -1,5 +1,4 @@
 <?php ob_start();?>
-<main>
 <?php 
 foreach($requeteFilm as $desc){ ?>
     <div>
@@ -12,9 +11,6 @@ foreach($requeteFilm as $desc){ ?>
             <input type="text" name="titre" value='<?= $desc['titre'] ?>' required minlength="3" maxlength="20" size="10">
             <input type="submit" value="modifier titre" >
         </form><br></br>
-
-
-
 
 
         <h2>Realisateur</h2>
@@ -44,9 +40,6 @@ foreach($requeteFilm as $desc){ ?>
 
         <input type="submit" value="modifier réalisateur" >
         </form><br><br>
-
-
-
 
 
         <h2>Casting</h2>
@@ -90,8 +83,8 @@ foreach($requeteFilm as $desc){ ?>
             <input type="submit" value="modifier acteur" >
             </form><br><br>
         <?php }?>
-        
-        
+
+
         <h2>Année de sortie</h2>
         <!-- +-----------------------------------------+  -->
         <!-- |     titre :  [     ]                    |  -->
@@ -102,7 +95,7 @@ foreach($requeteFilm as $desc){ ?>
             <input type="submit" value="modifier année" >
         </form><br></br>
 
-        
+
         <h2>Genre</h2>
         <!-- +-----------------------------------------+  -->
         <!-- |     Genre :                             |  -->
@@ -152,8 +145,6 @@ foreach($requeteFilm as $desc){ ?>
 
 </form> 
 </div>
-
-</main>
 <?php
 
 $titre = "Modifier description";

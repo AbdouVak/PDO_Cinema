@@ -1,7 +1,5 @@
 <?php ob_start(); ?>
 
-<main>
-
 <div class="listeAlphabet"><?php
     foreach($alphabet as $lettres){?>
         <a href="#lettre<?= $lettres ?>"><p><?= $lettres ?></p></a><?php
@@ -19,7 +17,6 @@ foreach($alphabet as $lettres){?>
         }?>
     </div><?php
 }?>
-</main>
 
 <?php
 $cssCustum = "<link rel='stylesheet' href='public/css/listerPage.css' />";
