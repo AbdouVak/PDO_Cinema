@@ -1,5 +1,5 @@
 <?php ob_start();?>
-
+<main>
 <!-- formulaires -->
 <form action="index.php?action=ajouterFilm" method="POST">
     
@@ -88,7 +88,7 @@
     <input type="submit" value="ajouter film" >
 
 </form>
-
+</main>
 <?php
 $titre = "Ajouter film";
 $titreSecondaire = "Ajouter film";

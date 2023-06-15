@@ -1,6 +1,6 @@
 <?php ob_start();?>
 
-
+<main>
 <!-- formulaires -->
 <form action="index.php?action=ajouterCasting" method="POST" enctype="multipart/form-data">
     
@@ -59,8 +59,9 @@
     <input type="submit" value="ajouter personne" >
 
 </form>
-
+</main>
 <?php
+$cssCustum = "<link> </link>";
 $titre = "Ajouter Casting";
 $titreSecondaire = "Ajouter role";
 $contenu = ob_get_clean();

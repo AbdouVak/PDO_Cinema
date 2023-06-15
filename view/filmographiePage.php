@@ -1,6 +1,5 @@
 <?php ob_start();?>
-
-
+<main>
 <?php // affiche les acteur
 
         foreach($requeteFilm as $Film){?>
@@ -15,7 +14,7 @@
             }?>
             
         <?php }?>
-    
+</main>    
 <?php 
 
 $titre = "Filmograhie";

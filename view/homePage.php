@@ -1,5 +1,5 @@
 <?php ob_start();?>
-
+<main>
 <h2> Il y a <?= $requete->rowCount()?> films</h2>
 
 <div class='afficheConteneur'><?php
@@ -21,8 +21,9 @@
         </div><?php 
     }?>
 </div>
-
+</main>
 <?php
+$cssCustum = "<link rel='stylesheet' href='public/css/homePage.css' />";
 $titre = "Acceuil";
 $titreSecondaire = "Acceuil";
 $contenu = ob_get_clean();

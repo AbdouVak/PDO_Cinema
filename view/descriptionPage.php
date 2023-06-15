@@ -1,5 +1,5 @@
 <?php ob_start();?>
-
+<main>
 <p> description du film</p>
 
 <a href="index.php?action=descModificationPage&id=<?= $idFilm ?>">Modifier</a>
@@ -43,8 +43,10 @@ foreach($requeteFilm as $desc){ ?>
             ?>Synopsis : <br><?= $desc['synopsis']?><?php 
         } ?>
     </div>
-<?php }
-?>
+<?php }?>
+
+</main>
+
 </div>
 
 

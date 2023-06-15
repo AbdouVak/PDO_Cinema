@@ -1,5 +1,5 @@
 <?php ob_start();?>
-
+<main>
 <?php 
 foreach($requeteFilm as $desc){ ?>
     <div>
@@ -153,7 +153,7 @@ foreach($requeteFilm as $desc){ ?>
 </form> 
 </div>
 
-
+</main>
 <?php
 
 $titre = "Modifier description";
