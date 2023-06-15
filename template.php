@@ -5,6 +5,7 @@
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <link rel="stylesheet" href="public/css/style.css" />
+    <?= $cssCustum ?>
     <title><?= $titre ?></title>
 </head>
 
@@ -21,8 +22,7 @@
     <div>
         <main>
             <div id="contenue">
-                <h1>PDO cinema</h1>
-                <h2><?= $titreSecondaire ?></h2>
+                <h1>PDO cinema - <?= $titreSecondaire ?></h1>
                 <?= $contenu  ?>
             </div>
         </main>
