@@ -10,7 +10,7 @@ html{
 }
 
 
-/* CSS generale*/
+/* *************************************** CSS generale*/
 h1{
     color: rgb(255, 255, 255);
     margin-top: 30px;
@@ -35,14 +35,21 @@ h2{
     margin-bottom: 10px;
 }
 
-/* CSS pour le template*/
+/* *************************************** CSS pour le template*/
 nav{
     background-color: brown;
     border-radius: 5px;
-    margin-top: 30px;
-    padding-top: 30px;
-    padding-bottom: 30px;
+    display: flex;
+    flex-direction: row;
+    flex-wrap: wrap;
+    justify-content: center;
+    margin-top: 20px;
+    padding: 10px;
+    gap:10px 10px;
+    margin-left: 10%;
+    margin-right: 10%;
 }
+
 .lienNavBar{
     color: brown;
     background-color: rgb(255, 255, 255);
@@ -51,78 +58,7 @@ nav{
     padding: 10px;
 }
 
-/* CSS pour le homePage*/
-
-.affiche{
-    background-color: brown;
-    border-radius: 5px;
-    padding: 10px;
-    margin: 10px;
-}
-
-.affiche p{
-    color: darkslategray;
-    background-color: rgb(255, 255, 255);
-    padding: 5px;
-    border-radius: 5px;
-    display: flex;
-    justify-content: center;
-}
-
-.afficheConteneur{
-    display: flex;
-    flex-direction: row ;
-}
-
-/* CSS pour la liste Acteur*/
-
-.personneContaineur{
-    display: flex;
-    flex-direction: row ;
-    padding-left: 10px;
-}
-
-.alphabetBar{
-    background-color: brown;
-    border-radius: 5px;
-    padding: 10px;
-    margin: 10px;
-}
-.alphabetBar h3{
-    background-color: brown;
-    display: flex;
-    justify-content: center;
-}
-
-/* CSS pour le ajouterPersonnePage*/
-
-.formulaires{
-    background-color: brown;
-    width: 1500px;
-    border-radius: 10px;
-    display: flex;
-    flex-direction: column;
-    justify-content: center;
-    padding: 10px;
-}
-
-.inputConteneurs{
-    background-color: darkslategray;
-    width: 200px;
-    display: flex;
-    justify-content: center;
-    border-radius: 10px;
-    padding: 5px;
-
-    margin-bottom: 10px;
-}
-
-.inputConteneurs input{
-    background-color: aliceblue;
-    margin-left: 10px;
-}
-
-.inputConteneurs label{
-    background-color: aliceblue;
-    
+main{
+    margin-left: 10%;
+    margin-right: 10%;
 }
