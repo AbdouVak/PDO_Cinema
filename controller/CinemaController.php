@@ -207,7 +207,7 @@ class CinemaController{
         $requeteGenre = $ctrlTake -> recuperGenre();
 
         $sqlFilm = "
-            SELECT titre,anneeSortieFrance,genreLibelle,affiche
+            SELECT titre,anneeSortieFrance,genreLibelle,affiche,film.id_film
             FROM film,genre,genrefilm
             WHERE film.id_film = genrefilm.id_film
             AND genre.id_genre = genrefilm.id_genre";
