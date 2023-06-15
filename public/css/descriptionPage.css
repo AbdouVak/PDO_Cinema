@@ -1,0 +1,27 @@
+.descriptionContainer{
+    background-color: brown;
+    padding: 10px;
+}
+
+.boxDescription{
+    background-color: brown;
+    display: flex;
+    flex-direction: row;
+    flex-wrap: wrap;
+    justify-content: space-between;
+}
+
+.boxImg{
+    background-color: brown;
+}
+
+.boxText{
+    background-color: brown;
+}
+.boxInfo{
+    color: aliceblue;
+    padding: 10px;
+}
+img{
+    width: 300px;
+}
