@@ -1,8 +1,17 @@
 <?php ob_start(); ?>
-<?php
+<main>
+
+<div class="listegenre"><?php
+    foreach($requeteGenre as $genre){?>
+        <a href="#genre<?= $genre['genreLibelle'] ?>"><p><?= $genre['genreLibelle'] ?></p></a><?php
+    }?>
+</div><?php
+
+
+
 foreach($requeteGenre as $genre){?>
 
-    <div class="alphabetBar"><h3><?= $genre['genreLibelle']?></h3></div>
+    <div class="genreBar" id="genre<?=$genre['genreLibelle']?>"><h3><?= $genre['genreLibelle']?></h3></div>
     <div class='afficheConteneur'><?php
         foreach($requeteFilm as $Film){?> 
             <div class="afficheConteneur"><?php
@@ -23,8 +32,9 @@ foreach($requeteGenre as $genre){?>
         } ?>
     </div><?php
 }?>
-
+</main>
 <?php
+$cssCustum = "<link rel='stylesheet' href='public/css/listeGenrePage.css' />";
 $titre = "Liste Genre";
 $titreSecondaire = "Liste Genre";
 $contenu = ob_get_clean();
