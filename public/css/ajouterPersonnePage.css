@@ -14,7 +14,8 @@ form{
 
 .inputConteneurs{
     background-color: darkslategray;
-
+    width: auto;
+    min-width: 100px;
     border-radius: 5px;
     gap: 30px;
     padding: 10px;
@@ -37,21 +38,27 @@ form{
 
 .inputConteneurs input{
     background-color: aliceblue;
-    border: 2px solid aliceblue;
+    border: 2px solid ;
     color: rgb(14, 14, 16);
     border-radius: 2px;
 }
 
 .inputConteneurs select{
     background-color: aliceblue;
-    border: 2px solid aliceblue;
+    border: 2px solid ;
     color: rgb(14, 14, 16);
     border-radius: 2px;
 }
 
 .inputConteneurs option{
     background-color: aliceblue;
-    border: 2px solid aliceblue;
+    border: 2px solid ;
     color: rgb(14, 14, 16);
     border-radius: 2px;
+}
+
+.center{
+    display: flex;
+    justify-content: center;
+    padding: 10px;
 }
