@@ -1,0 +1,59 @@
+form{
+    background-color: brown;
+    display: flex;
+    flex-direction: column;
+
+    border-radius: 5px;
+    padding-top: 20px;
+    padding-bottom: 20px;
+    padding-left: 38%;
+    padding-right: 38%;
+    width: auto;
+}
+
+
+.inputConteneurs{
+    background-color: darkslategray;
+
+
+
+    border-radius: 5px;
+    gap: 30px;
+    padding: 10px;
+    margin-top: 10px;
+    margin-bottom: 10px;
+    margin-left: 5px;
+    margin-right: 5px;
+
+    display: flex;
+    justify-content: space-between;
+    flex-direction: row;
+    flex-wrap: wrap;
+}
+
+.inputConteneurs label{
+    background-color: aliceblue;
+    padding: 5px;
+    border-radius: 2px;
+}
+
+.inputConteneurs input{
+    background-color: aliceblue;
+    border: 2px solid aliceblue;
+    color: rgb(14, 14, 16);
+    border-radius: 2px;
+}
+
+.inputConteneurs select{
+    background-color: aliceblue;
+    border: 2px solid aliceblue;
+    color: rgb(14, 14, 16);
+    border-radius: 2px;
+}
+
+.inputConteneurs option{
+    background-color: aliceblue;
+    border: 2px solid aliceblue;
+    color: rgb(14, 14, 16);
+    border-radius: 2px;
+}
